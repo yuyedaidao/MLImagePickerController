@@ -72,6 +72,9 @@ class MLImagePickerController:  UIViewController,
         btn.setTitle("所有图片", forState: .Normal)
         btn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
         self.navigationItem.titleView = btn
+        
+        
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "done")
     }
     
     func setupCollectionView(){
