@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MLImagePickerAssetsCellDelegate {
-    func imagePickerSelectAssetsCellWithSelected(let cell:UICollectionViewCell,let selected:Bool);
+    func imagePickerSelectAssetsCellWithSelected(indexPath:NSIndexPath,let selected:Bool);
 }
 
 class MLImagePickerAssetsCell: UICollectionViewCell {
@@ -18,6 +18,7 @@ class MLImagePickerAssetsCell: UICollectionViewCell {
     @IBOutlet weak var imageV: UIImageView!
     var delegate:MLImagePickerAssetsCellDelegate?
     var localIdentifier:String!
+    var indexPath:NSIndexPath!
     var selectButtonSelected:Bool! {
         didSet{
             if self.selectButton.selected == selectButtonSelected {
@@ -48,7 +49,7 @@ return image
         
         self.selectButton.selected = !self.selectButton.selected
         if self.delegate != nil {
-            self.delegate?.imagePickerSelectAssetsCellWithSelected(self, selected: self.selectButton.selected)
+            self.delegate?.imagePickerSelectAssetsCellWithSelected(self.indexPath, selected: self.selectButton.selected)
         }
     }
 }

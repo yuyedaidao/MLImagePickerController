@@ -10,5 +10,6 @@ import UIKit
 
 class MLImagePickerGroupCell: UITableViewCell {
 
+    @IBOutlet weak var assetCountLbl: UILabel!
     @IBOutlet weak var titleLbl: UILabel!
 }

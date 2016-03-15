@@ -25,6 +25,7 @@ class MLImagePickerController:  UIViewController,
     let photoIdentifiers:NSMutableArray = []
     var groupTableView:UITableView?
     var groupSectionFetchResults:NSMutableArray = []
+    var messageLbl:UILabel!
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
@@ -138,6 +139,7 @@ class MLImagePickerController:  UIViewController,
         let cell:MLImagePickerAssetsCell = collectionView.dequeueReusableCellWithReuseIdentifier("MLImagePickerAssetsCell", forIndexPath: indexPath) as! MLImagePickerAssetsCell
         
         cell.delegate = self
+        cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
         cell.selectButtonSelected = self.selectAssets.containsObject(cell.localIdentifier)
         cell.imageV.image = self.assets[indexPath.item] as? UIImage
@@ -159,25 +161,126 @@ class MLImagePickerController:  UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let fetchResult:PHFetchResult = self.groupSectionFetchResults[indexPath.section] as! PHFetchResult
+        
         let cell:MLImagePickerGroupCell = tableView.dequeueReusableCellWithIdentifier("MLImagePickerGroupCell") as! MLImagePickerGroupCell
         if indexPath.section == 0 {
             cell.titleLbl.text = "所有相册"
+            cell.assetCountLbl.text = "\(fetchResult.count)"
         }else{
-            let fetchResult:PHFetchResult = self.groupSectionFetchResults[indexPath.section] as! PHFetchResult
-            let collection:PHCollection = fetchResult[indexPath.row] as! PHCollection
+            let collection:PHAssetCollection = fetchResult[indexPath.row] as! PHAssetCollection
+            let result:PHFetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: nil)
             cell.titleLbl.text = collection.localizedTitle
+            cell.assetCountLbl.text = "\(result.count)"
         }
+        
         return cell
     }
     
-    func imagePickerSelectAssetsCellWithSelected(cell: UICollectionViewCell, selected: Bool) {
-        let indexPath:NSIndexPath = (self.collectionView?.indexPathForCell(cell))!
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        self.setupGroupTableView()
+        
+        var fetchResult:PHFetchResult = self.groupSectionFetchResults[indexPath.section] as! PHFetchResult
+        if indexPath.section == 0 {
+
+            let imageManager:PHCachingImageManager = PHCachingImageManager()
+            let requestOptions = PHImageRequestOptions()
+            requestOptions.deliveryMode = .FastFormat
+            requestOptions.networkAccessAllowed = true
+
+            self.photoIdentifiers.removeAllObjects()
+            self.assets.removeAllObjects()
+            self.showWatting()
+            
+            for (var i = 0; i < fetchResult.count; i++){
+                let asset:PHAsset = fetchResult[i] as! PHAsset
+                self.photoIdentifiers.addObject(asset.localIdentifier)
+                imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+                    
+                    if image != nil {
+                        self.assets.addObject(image!)
+                    }
+                    
+                    if self.assets.count == fetchResult.count {
+                        self.hideWatting()
+                        self.collectionView?.reloadData()
+                    }
+                }
+            }
+        }else{
+            let collection:PHAssetCollection = fetchResult[indexPath.row] as! PHAssetCollection
+            fetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: nil)
+            
+            let imageManager:PHCachingImageManager = PHCachingImageManager()
+            let requestOptions = PHImageRequestOptions()
+            requestOptions.deliveryMode = .FastFormat
+            requestOptions.networkAccessAllowed = true
+            
+            self.photoIdentifiers.removeAllObjects()
+            self.assets.removeAllObjects()
+            self.showWatting()
+            
+            for (var i = 0; i < fetchResult.count; i++){
+                let asset:PHAsset = fetchResult[i] as! PHAsset
+                self.photoIdentifiers.addObject(asset.localIdentifier)
+                imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+                    
+                    if image != nil {
+                        self.assets.addObject(image!)
+                    }
+                    
+                    if self.assets.count == fetchResult.count {
+                        self.hideWatting()
+                        self.collectionView?.reloadData()
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60
+    }
+    
+    func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) {
         let identifier = self.photoIdentifiers[indexPath.item]
         if selected == true {
             self.selectAssets.addObject(identifier)
         }else{
             self.selectAssets.removeObject(identifier)
+        }
+    }
+    
+    func showWatting(){
+        self.collectionView!.userInteractionEnabled = false
+        if self.messageLbl != nil {
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.messageLbl.alpha = 1.0
+            })
+        }else {
+            let width:CGFloat = 100
+            let height:CGFloat = 35
+            let x:CGFloat = (self.view.frame.width - width) * 0.5
+            let y:CGFloat = (self.view.frame.height - height) * 0.5
+            let messageLbl:UILabel = UILabel(frame: CGRectMake(x,y,width,height))
+            messageLbl.layer.masksToBounds = true
+            messageLbl.layer.cornerRadius = 5.0
+            messageLbl.textAlignment = .Center
+            messageLbl.text = "加载中..."
+            messageLbl.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+            messageLbl.textColor = UIColor.whiteColor()
+            self.view.addSubview(messageLbl)
+            self.messageLbl = messageLbl
+        }
+    }
+    
+    func hideWatting(){
+        self.collectionView!.userInteractionEnabled = true
+        UIView.animateWithDuration(0.25) { () -> Void in
+            self.messageLbl.alpha = 0.0
         }
     }
     
