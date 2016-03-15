@@ -17,6 +17,8 @@
 		4818C6A11C97B9D400C9C6CD /* MLImagePickerAssetsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4818C69F1C97B9D400C9C6CD /* MLImagePickerAssetsCell.xib */; };
 		4818C6A31C97DC6700C9C6CD /* ZLPhotoLib.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4818C6A21C97DC6700C9C6CD /* ZLPhotoLib.bundle */; };
 		4818C6A51C97DCC500C9C6CD /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818C6A41C97DCC500C9C6CD /* UIImage+Extension.swift */; };
+		4818C6A71C980D1E00C9C6CD /* MLImagePickerGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818C6A61C980D1E00C9C6CD /* MLImagePickerGroupCell.swift */; };
+		4818C6A91C980D2800C9C6CD /* MLImagePickerGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4818C6A81C980D2800C9C6CD /* MLImagePickerGroupCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		4818C69F1C97B9D400C9C6CD /* MLImagePickerAssetsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerAssetsCell.xib; sourceTree = "<group>"; };
 		4818C6A21C97DC6700C9C6CD /* ZLPhotoLib.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoLib.bundle; sourceTree = "<group>"; };
 		4818C6A41C97DCC500C9C6CD /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		4818C6A61C980D1E00C9C6CD /* MLImagePickerGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerGroupCell.swift; sourceTree = "<group>"; };
+		4818C6A81C980D2800C9C6CD /* MLImagePickerGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerGroupCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,8 @@
 				4818C69E1C97B9D400C9C6CD /* MLImagePickerAssetsCell.swift */,
 				4818C69F1C97B9D400C9C6CD /* MLImagePickerAssetsCell.xib */,
 				4818C6A41C97DCC500C9C6CD /* UIImage+Extension.swift */,
+				4818C6A61C980D1E00C9C6CD /* MLImagePickerGroupCell.swift */,
+				4818C6A81C980D2800C9C6CD /* MLImagePickerGroupCell.xib */,
 			);
 			path = MLImagePickerController;
 			sourceTree = "<group>";
@@ -138,6 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4818C6A91C980D2800C9C6CD /* MLImagePickerGroupCell.xib in Resources */,
 				480C7C0D1C96BD970002831A /* LaunchScreen.storyboard in Resources */,
 				4818C6A11C97B9D400C9C6CD /* MLImagePickerAssetsCell.xib in Resources */,
 				4818C6A31C97DC6700C9C6CD /* ZLPhotoLib.bundle in Resources */,
@@ -153,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4818C6A71C980D1E00C9C6CD /* MLImagePickerGroupCell.swift in Sources */,
 				480C7C151C96BDFC0002831A /* MLImagePickerController.swift in Sources */,
 				4818C6A01C97B9D400C9C6CD /* MLImagePickerAssetsCell.swift in Sources */,
 				4818C6A51C97DCC500C9C6CD /* UIImage+Extension.swift in Sources */,
