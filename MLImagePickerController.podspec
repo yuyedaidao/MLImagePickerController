@@ -2,16 +2,16 @@
 Pod::Spec.new do |s|
 
   s.name         = "MLImagePickerController"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "MLImagePickerController Swift written using PhotoKit easy to use multi album Library Based on."
 
   s.description  = <<-DESC
-                   DESC
+                    The PhotoKit package, so that the use of more simple, provides more pictures, more video preview, fast and easy to use features
+                    DESC
 
-  s.homepage     = "http://github.com/MakeZL/MLImagePickerController"
-  s.screenshots  = "https://github.com/MakeZL/MLImagePickerController/blob/master/DemoSketch/Demo1.png"
+  s.homepage     = "https://github.com/MakeZL/MLImagePickerController"
 
-  s.license      = "MIT (example)"
+  s.license      = { :type => "MIT", :file => "LICENSE" }
 
   s.author             = { "Leo" => "120886865@qq.com" }
   s.social_media_url   = "http://weibo.com/MakeZL"
@@ -19,10 +19,10 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
   s.ios.deployment_target = "8.0"
 
-  s.source       = { :git => "http://github.com/MakeZL/MLImagePickerController.git", :tag => s.version }
+  s.source       = { :git => "https://github.com/MakeZL/MLImagePickerController.git", :tag => s.version }
 
-  s.source_files  = ["MLImagePickerController/Classes/*.swift"]
-  s.resource = "MLImagePickerController/MLImagePickerController.bundle"
+  s.source_files  = "MLImagePickerController/**/*.swift"
+  s.resource = "MLImagePickerController/Classes/MLImagePickerController.bundle"
 
   s.requires_arc = true
   s.framework = "Photos"
