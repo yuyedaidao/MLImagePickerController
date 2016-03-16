@@ -21,7 +21,7 @@ class MLImagePickerController:  UIViewController,
                                 UITableViewDelegate
 {
     
-    var assets:NSMutableArray = []
+    var fetchResult:PHFetchResult!
     var collectionView:UICollectionView?
     let CELL_MARGIN:CGFloat = 2
     let CELL_ROW:CGFloat = 3
@@ -34,6 +34,8 @@ class MLImagePickerController:  UIViewController,
     var delegate:MLImagePickerControllerDelegate?
     var redTagLbl:UILabel!
     var titleBtn:UIButton!
+    var AssetGridThumbnailSize:CGSize!
+    var imageManager:PHCachingImageManager!
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
@@ -42,9 +44,20 @@ class MLImagePickerController:  UIViewController,
         vc.presentViewController(navigationVc, animated: true, completion: nil)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.imageManager = PHCachingImageManager()
+        self.imageManager.stopCachingImagesForAllAssets()
+        
+        let scale = UIScreen.mainScreen().scale
+        let width = (self.view.frame.size.width - CELL_MARGIN * CELL_ROW + 1) / CELL_ROW;
+        AssetGridThumbnailSize = CGSizeMake(width * scale, width * scale);
         
         self.view.backgroundColor = UIColor.whiteColor()
         self.setupNavigationBar()
@@ -53,28 +66,24 @@ class MLImagePickerController:  UIViewController,
         let options:PHFetchOptions = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result:PHFetchResult = PHAsset.fetchAssetsWithOptions(options)
-        
-        let imageManager:PHCachingImageManager = PHCachingImageManager()
 
         let requestOptions = PHImageRequestOptions()
         requestOptions.deliveryMode = .FastFormat
         requestOptions.networkAccessAllowed = true
-
-        self.showWatting()
+        self.fetchResult = result
+        
+        
         for (var i = 0; i < result.count; i++){
             let asset:PHAsset = result[i] as! PHAsset
-            
             self.photoIdentifiers.addObject(asset.localIdentifier)
-            imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-                
-                if image != nil {
-                    self.hideWatting()
-                    self.assets.addObject(image!)
-                    self.collectionView?.reloadData()
-                }
-            }
-            
         }
+        self.collectionView?.reloadData()
+//        self.showWatting()
+//        self.collectionView?.reloadData()
+//        for (var i = 0; i < result.count; i++){
+//            
+//            
+//        }
         
     }
     
@@ -173,17 +182,28 @@ class MLImagePickerController:  UIViewController,
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (self.assets.count > 0) ? self.assets.count : 0
+        return (self.fetchResult.count > 0) ? self.fetchResult.count : 0
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell:MLImagePickerAssetsCell = collectionView.dequeueReusableCellWithReuseIdentifier("MLImagePickerAssetsCell", forIndexPath: indexPath) as! MLImagePickerAssetsCell
         
+        
+        let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
+        
         cell.delegate = self
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
         cell.selectButtonSelected = self.selectIndentifier.containsObject(cell.localIdentifier)
-        cell.imageV.image = self.assets[indexPath.item] as? UIImage
+        
+        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+            
+            // Set the cell's thumbnail image if it's still showing the same asset.
+            if (cell.localIdentifier == asset.localIdentifier) {
+                cell.imageV.image = image;
+            }
+        }
+        
         
         return cell
     }
@@ -221,68 +241,30 @@ class MLImagePickerController:  UIViewController,
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        self.setupGroupTableView()
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.setupGroupTableView()
+        self.photoIdentifiers.removeAllObjects()
         
         let cell:MLImagePickerGroupCell = tableView.cellForRowAtIndexPath(indexPath) as! MLImagePickerGroupCell
         self.titleBtn.setTitle(cell.titleLbl.text, forState: .Normal)
         
         var fetchResult:PHFetchResult = self.groupSectionFetchResults[indexPath.section] as! PHFetchResult
-        if indexPath.section == 0 {
-
-            let imageManager:PHCachingImageManager = PHCachingImageManager()
-            let requestOptions = PHImageRequestOptions()
-            requestOptions.deliveryMode = .FastFormat
-            requestOptions.networkAccessAllowed = true
-
-            self.photoIdentifiers.removeAllObjects()
-            self.assets.removeAllObjects()
-            self.showWatting()
-            
-            for (var i = 0; i < fetchResult.count; i++){
-                let asset:PHAsset = fetchResult[i] as! PHAsset
-                self.photoIdentifiers.addObject(asset.localIdentifier)
-                imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-                    
-                    if image != nil {
-                        self.assets.addObject(image!)
-                    }
-                    
-                    if self.assets.count == fetchResult.count {
-                        self.hideWatting()
-                    }
-                    self.collectionView?.reloadData()
-                }
-            }
-        }else{
+        
+        if indexPath.section != 0 {
             let collection:PHAssetCollection = fetchResult[indexPath.row] as! PHAssetCollection
             fetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: nil)
-            
-            let imageManager:PHCachingImageManager = PHCachingImageManager()
-            let requestOptions = PHImageRequestOptions()
-            requestOptions.deliveryMode = .FastFormat
-            requestOptions.networkAccessAllowed = true
-            
-            self.photoIdentifiers.removeAllObjects()
-            self.assets.removeAllObjects()
-            self.showWatting()
-            
-            for (var i = 0; i < fetchResult.count; i++){
-                let asset:PHAsset = fetchResult[i] as! PHAsset
-                self.photoIdentifiers.addObject(asset.localIdentifier)
-                imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-                    
-                    if image != nil {
-                        self.assets.addObject(image!)
-                    }
-                    
-                    if self.assets.count == fetchResult.count {
-                        self.hideWatting()
-                    }
-                    self.collectionView?.reloadData()
-                }
-            }
         }
+        self.fetchResult = fetchResult
+        
+        for (var i = 0; i < fetchResult.count; i++){
+            let asset:PHAsset = fetchResult[i] as! PHAsset
+            self.photoIdentifiers.addObject(asset.localIdentifier)
+        }
+        for (var i = 0; i < fetchResult.count; i++){
+            let asset:PHAsset = fetchResult[i] as! PHAsset
+            self.photoIdentifiers.addObject(asset.localIdentifier)
+        }
+        self.collectionView?.reloadData()
         
     }
     
@@ -292,17 +274,38 @@ class MLImagePickerController:  UIViewController,
     
     func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) {
         let identifier = self.photoIdentifiers[indexPath.item]
-        let image = self.assets[indexPath.item]
+        let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
+        
         if selected == true {
-            self.selectImages.addObject(image)
+            // Insert
             self.selectIndentifier.addObject(identifier)
         }else{
-            self.selectImages.removeObject(image)
+            // Delete
+            if selectIndentifier.containsObject(identifier) {
+                let index = self.selectIndentifier.indexOfObject(identifier)
+                self.selectImages.removeObjectAtIndex(index)
+            }
             self.selectIndentifier.removeObject(identifier)
+            
+            self.redTagLbl.hidden = (self.selectImages.count == 0)
+            self.redTagLbl.text = "\(self.selectImages.count)"
+            
+            return
+        }
+    
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.deliveryMode = .HighQualityFormat
+        requestOptions.networkAccessAllowed = true
+        
+        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+            if image != nil {
+                self.selectImages.addObject(image!)
+                
+                self.redTagLbl.hidden = (self.selectImages.count == 0)
+                self.redTagLbl.text = "\(self.selectImages.count)"
+            }
         }
         
-        self.redTagLbl.hidden = (self.selectImages.count == 0)
-        self.redTagLbl.text = "\(self.selectImages.count)"
     }
     
     func showWatting(){
