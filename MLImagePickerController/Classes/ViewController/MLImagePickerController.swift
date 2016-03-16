@@ -32,6 +32,8 @@ class MLImagePickerController:  UIViewController,
     var groupSectionFetchResults:NSMutableArray = []
     var messageLbl:UILabel!
     var delegate:MLImagePickerControllerDelegate?
+    var redTagLbl:UILabel!
+    var titleBtn:UIButton!
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
@@ -77,14 +79,33 @@ class MLImagePickerController:  UIViewController,
     }
     
     func setupNavigationBar(){
-        let btn = UIButton(type: .Custom)
-        btn.titleLabel?.font = UIFont.systemFontOfSize(15)
-        btn.setTitleColor(UIColor.grayColor(), forState: .Normal)
-        btn.setTitle("所有图片", forState: .Normal)
-        btn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
-        self.navigationItem.titleView = btn
+        let titleBtn = UIButton(type: .Custom)
+        titleBtn.frame = CGRectMake(0, 0, 200, 44)
+        titleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
+        titleBtn.setTitleColor(UIColor.grayColor(), forState: .Normal)
+        titleBtn.setTitle("所有图片", forState: .Normal)
+        titleBtn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
+        self.navigationItem.titleView = titleBtn
+        self.titleBtn = titleBtn
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "done")
+        let doneBtn = UIButton(type: .System)
+        doneBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
+        doneBtn.frame = CGRectMake(0, 0, 30, 44)
+        doneBtn.setTitle("完成", forState: .Normal)
+        doneBtn.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+        
+        let redTagLbl = UILabel()
+        redTagLbl.hidden = true
+        redTagLbl.layer.cornerRadius = 8.0
+        redTagLbl.layer.masksToBounds = true
+        redTagLbl.backgroundColor = UIColor.redColor()
+        redTagLbl.textColor = UIColor.whiteColor()
+        redTagLbl.font = UIFont.systemFontOfSize(12)
+        redTagLbl.textAlignment = .Center
+        redTagLbl.frame = CGRectMake(doneBtn.frame.width-8,0, 16, 16)
+        doneBtn.addSubview(redTagLbl)
+        self.redTagLbl = redTagLbl
     }
     
     func done(){
@@ -186,7 +207,7 @@ class MLImagePickerController:  UIViewController,
         
         let cell:MLImagePickerGroupCell = tableView.dequeueReusableCellWithIdentifier("MLImagePickerGroupCell") as! MLImagePickerGroupCell
         if indexPath.section == 0 {
-            cell.titleLbl.text = "所有相册"
+            cell.titleLbl.text = "所有图片"
             cell.assetCountLbl.text = "\(fetchResult.count)"
         }else{
             let collection:PHAssetCollection = fetchResult[indexPath.row] as! PHAssetCollection
@@ -201,6 +222,10 @@ class MLImagePickerController:  UIViewController,
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         self.setupGroupTableView()
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        let cell:MLImagePickerGroupCell = tableView.cellForRowAtIndexPath(indexPath) as! MLImagePickerGroupCell
+        self.titleBtn.setTitle(cell.titleLbl.text, forState: .Normal)
         
         var fetchResult:PHFetchResult = self.groupSectionFetchResults[indexPath.section] as! PHFetchResult
         if indexPath.section == 0 {
@@ -225,8 +250,8 @@ class MLImagePickerController:  UIViewController,
                     
                     if self.assets.count == fetchResult.count {
                         self.hideWatting()
-                        self.collectionView?.reloadData()
                     }
+                    self.collectionView?.reloadData()
                 }
             }
         }else{
@@ -253,8 +278,8 @@ class MLImagePickerController:  UIViewController,
                     
                     if self.assets.count == fetchResult.count {
                         self.hideWatting()
-                        self.collectionView?.reloadData()
                     }
+                    self.collectionView?.reloadData()
                 }
             }
         }
@@ -275,6 +300,9 @@ class MLImagePickerController:  UIViewController,
             self.selectImages.removeObject(image)
             self.selectIndentifier.removeObject(identifier)
         }
+        
+        self.redTagLbl.hidden = (self.selectImages.count == 0)
+        self.redTagLbl.text = "\(self.selectImages.count)"
     }
     
     func showWatting(){
