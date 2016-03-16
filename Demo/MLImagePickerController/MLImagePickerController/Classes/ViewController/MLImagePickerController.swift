@@ -25,6 +25,7 @@ class MLImagePickerController:  UIViewController,
     var collectionView:UICollectionView?
     let CELL_MARGIN:CGFloat = 2
     let CELL_ROW:CGFloat = 3
+    let SELECT_MAX_COUNT:Int = 9
     var selectIndentifiers:NSMutableArray = []
     let selectImages:NSMutableArray = []
     let photoIdentifiers:NSMutableArray = []
@@ -36,11 +37,14 @@ class MLImagePickerController:  UIViewController,
     var titleBtn:UIButton!
     var AssetGridThumbnailSize:CGSize!
     var imageManager:PHCachingImageManager!
+    var selectPickerMaxCount:Int?
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
         imagePickerVc.delegate = self.delegate
         imagePickerVc.selectIndentifiers = selectIndentifiers
+        imagePickerVc.selectPickerMaxCount = self.selectPickerMaxCount == nil ? SELECT_MAX_COUNT : self.selectPickerMaxCount
+        
         let navigationVc = UINavigationController(rootViewController: imagePickerVc)
         vc.presentViewController(navigationVc, animated: true, completion: nil)
     }
@@ -85,10 +89,12 @@ class MLImagePickerController:  UIViewController,
     func setupNavigationBar(){
         let titleBtn = UIButton(type: .Custom)
         titleBtn.frame = CGRectMake(0, 0, 200, 44)
+        titleBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0)
         titleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         titleBtn.setTitleColor(UIColor.grayColor(), forState: .Normal)
         titleBtn.setTitle("所有图片", forState: .Normal)
         titleBtn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
+        titleBtn.setImage(self.ml_imageFromBundleNamed("zl_xialajiantou"), forState: .Normal)
         self.navigationItem.titleView = titleBtn
         self.titleBtn = titleBtn
         
@@ -269,11 +275,18 @@ class MLImagePickerController:  UIViewController,
         return 60
     }
     
-    func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) {
+    func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
         let identifier = self.photoIdentifiers[indexPath.item]
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
         
         if selected == true {
+            if (self.selectIndentifiers.count >= self.selectPickerMaxCount) {
+                self.showWatting("选择照片不能超过\(self.selectPickerMaxCount!)张")
+                UIView.animateWithDuration(1.0, animations: { () -> Void in
+                    self.hideWatting()
+                })
+                return false
+            }
             // Insert
             self.selectIndentifiers.addObject(identifier)
         }else{
@@ -287,7 +300,7 @@ class MLImagePickerController:  UIViewController,
             self.redTagLbl.hidden = (self.selectIndentifiers.count == 0)
             self.redTagLbl.text = "\(self.selectIndentifiers.count)"
             
-            return
+            return true
         }
     
         let requestOptions = PHImageRequestOptions()
@@ -303,9 +316,10 @@ class MLImagePickerController:  UIViewController,
             }
         }
         
+        return true
     }
     
-    func showWatting(){
+    func showWatting(str:String){
         if self.collectionView != nil {
             self.collectionView!.userInteractionEnabled = false
         }
@@ -314,7 +328,7 @@ class MLImagePickerController:  UIViewController,
                 self.messageLbl.alpha = 1.0
             })
         }else {
-            let width:CGFloat = 100
+            let width:CGFloat = 180
             let height:CGFloat = 35
             let x:CGFloat = (self.view.frame.width - width) * 0.5
             let y:CGFloat = (self.view.frame.height - height) * 0.5
@@ -322,7 +336,7 @@ class MLImagePickerController:  UIViewController,
             messageLbl.layer.masksToBounds = true
             messageLbl.layer.cornerRadius = 5.0
             messageLbl.textAlignment = .Center
-            messageLbl.text = "加载中..."
+            messageLbl.text = str
             messageLbl.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
             messageLbl.textColor = UIColor.whiteColor()
             self.view.addSubview(messageLbl)
@@ -335,6 +349,11 @@ class MLImagePickerController:  UIViewController,
         UIView.animateWithDuration(0.25) { () -> Void in
             self.messageLbl.alpha = 0.0
         }
+    }
+    
+    func ml_imageFromBundleNamed(named:String)->UIImage{
+        let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
+        return image
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

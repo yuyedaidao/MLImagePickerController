@@ -20,18 +20,13 @@ class ViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
     @IBAction func selectPhoto() {
         let pickerVc = MLImagePickerController()
         pickerVc.delegate = self
+//        pickerVc.selectPickerMaxCount = 5
         pickerVc.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
         pickerVc.show(self)
     }
@@ -53,4 +48,3 @@ class ViewController: UIViewController,
     }
 
 }
-

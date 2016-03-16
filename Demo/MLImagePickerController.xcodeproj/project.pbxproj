@@ -13,7 +13,6 @@
 		480C7C0A1C96BD970002831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 480C7C091C96BD970002831A /* Assets.xcassets */; };
 		480C7C0D1C96BD970002831A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 480C7C0B1C96BD970002831A /* LaunchScreen.storyboard */; };
 		482CF9B01C9959E500E7F226 /* MBIBDesignableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */; };
-		482CF9B11C9959E500E7F226 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */; };
 		482CF9B21C9959E500E7F226 /* MLImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */; };
 		482CF9B31C9959E500E7F226 /* MLImagePickerAssetsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AA1C9959E500E7F226 /* MLImagePickerAssetsCell.swift */; };
 		482CF9B41C9959E500E7F226 /* MLImagePickerAssetsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9AB1C9959E500E7F226 /* MLImagePickerAssetsCell.xib */; };
@@ -31,7 +30,6 @@
 		480C7C0C1C96BD970002831A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		480C7C0E1C96BD970002831A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBIBDesignableExtension.swift; sourceTree = "<group>"; };
-		482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLImagePickerController.bundle; sourceTree = "<group>"; };
 		482CF9AA1C9959E500E7F226 /* MLImagePickerAssetsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerAssetsCell.swift; sourceTree = "<group>"; };
 		482CF9AB1C9959E500E7F226 /* MLImagePickerAssetsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerAssetsCell.xib; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 			isa = PBXGroup;
 			children = (
 				482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */,
-				482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -209,7 +206,6 @@
 				480C7C031C96BD970002831A /* AppDelegate.swift in Sources */,
 				482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */,
 				482CF9B01C9959E500E7F226 /* MBIBDesignableExtension.swift in Sources */,
-				482CF9B11C9959E500E7F226 /* UIImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
