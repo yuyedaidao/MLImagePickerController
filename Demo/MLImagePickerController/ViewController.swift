@@ -5,6 +5,7 @@
 //  Created by zhanglei on 16/3/14.
 //  Copyright © 2016年 zhanglei. All rights reserved.
 //
+//  issue: https://github.com/MakeZL/MLImagePickerController/issues/new
 
 import UIKit
 
@@ -25,8 +26,11 @@ class ViewController: UIViewController,
     
     @IBAction func selectPhoto() {
         let pickerVc = MLImagePickerController()
+        // 回调
         pickerVc.delegate = self
-//        pickerVc.selectPickerMaxCount = 5
+        // 最大图片个数
+        pickerVc.selectPickerMaxCount = 5
+        // 默认记录选择的图片
         pickerVc.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
         pickerVc.show(self)
     }

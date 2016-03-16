@@ -278,7 +278,7 @@ class MLImagePickerController:  UIViewController,
         return 60
     }
     
-    private func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
+    func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
         let identifier = self.photoIdentifiers[indexPath.item]
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
         
