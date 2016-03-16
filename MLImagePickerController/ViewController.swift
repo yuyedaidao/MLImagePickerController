@@ -8,11 +8,19 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,
+                      MLImagePickerControllerDelegate,
+                      UITableViewDataSource,
+                      UITableViewDelegate
+{
 
+    @IBOutlet weak var tableView: UITableView!
+    var assets:NSArray? = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,9 +30,25 @@ class ViewController: UIViewController {
 
     @IBAction func selectPhoto() {
         let pickerVc = MLImagePickerController()
+        pickerVc.delegate = self
         pickerVc.show(self)
 //        let navVc = UINavigationController.init(rootViewController: pickerVc)
 
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.assets != nil ? self.assets!.count : 0
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell")
+        cell?.imageView!.image = self.assets![indexPath.item] as? UIImage
+        return cell!
+    }
+    
+    func imagePickerDidSelectedAssets(assets: NSArray) {
+        self.assets = assets
+        self.tableView.reloadData()
     }
 
 }

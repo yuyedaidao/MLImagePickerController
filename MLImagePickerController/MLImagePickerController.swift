@@ -9,6 +9,10 @@
 import UIKit
 import Photos
 
+protocol MLImagePickerControllerDelegate {
+    func imagePickerDidSelectedAssets(assets:NSArray)
+}
+
 class MLImagePickerController:  UIViewController,
                                 UICollectionViewDataSource,
                                 UICollectionViewDelegate,
@@ -21,20 +25,28 @@ class MLImagePickerController:  UIViewController,
     var collectionView:UICollectionView?
     let CELL_MARGIN:CGFloat = 2
     let CELL_ROW:CGFloat = 3
-    let selectAssets:NSMutableArray = []
+    let selectIndentifier:NSMutableArray = []
+    let selectImages:NSMutableArray = []
     let photoIdentifiers:NSMutableArray = []
     var groupTableView:UITableView?
     var groupSectionFetchResults:NSMutableArray = []
     var messageLbl:UILabel!
+    var delegate:MLImagePickerControllerDelegate?
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
+        imagePickerVc.delegate = self.delegate
         let navigationVc = UINavigationController(rootViewController: imagePickerVc)
         vc.presentViewController(navigationVc, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        self.view.backgroundColor = UIColor.whiteColor()
+        self.setupNavigationBar()
+        self.setupCollectionView()
         
         let options:PHFetchOptions = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -46,6 +58,7 @@ class MLImagePickerController:  UIViewController,
         requestOptions.deliveryMode = .FastFormat
         requestOptions.networkAccessAllowed = true
 
+        self.showWatting()
         for (var i = 0; i < result.count; i++){
             let asset:PHAsset = result[i] as! PHAsset
             
@@ -53,6 +66,7 @@ class MLImagePickerController:  UIViewController,
             imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100, 100), contentMode: .AspectFit, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
                 
                 if image != nil {
+                    self.hideWatting()
                     self.assets.addObject(image!)
                     self.collectionView?.reloadData()
                 }
@@ -60,9 +74,6 @@ class MLImagePickerController:  UIViewController,
             
         }
         
-        self.view.backgroundColor = UIColor.whiteColor()
-        self.setupNavigationBar()
-        self.setupCollectionView()
     }
     
     func setupNavigationBar(){
@@ -73,8 +84,14 @@ class MLImagePickerController:  UIViewController,
         btn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
         self.navigationItem.titleView = btn
         
-        
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "done")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "done")
+    }
+    
+    func done(){
+        if self.delegate != nil{
+            self.delegate?.imagePickerDidSelectedAssets(self.selectImages)
+        }
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func setupCollectionView(){
@@ -144,7 +161,7 @@ class MLImagePickerController:  UIViewController,
         cell.delegate = self
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
-        cell.selectButtonSelected = self.selectAssets.containsObject(cell.localIdentifier)
+        cell.selectButtonSelected = self.selectIndentifier.containsObject(cell.localIdentifier)
         cell.imageV.image = self.assets[indexPath.item] as? UIImage
         
         return cell
@@ -250,15 +267,20 @@ class MLImagePickerController:  UIViewController,
     
     func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) {
         let identifier = self.photoIdentifiers[indexPath.item]
+        let image = self.assets[indexPath.item]
         if selected == true {
-            self.selectAssets.addObject(identifier)
+            self.selectImages.addObject(image)
+            self.selectIndentifier.addObject(identifier)
         }else{
-            self.selectAssets.removeObject(identifier)
+            self.selectImages.removeObject(image)
+            self.selectIndentifier.removeObject(identifier)
         }
     }
     
     func showWatting(){
-        self.collectionView!.userInteractionEnabled = false
+        if self.collectionView != nil {
+            self.collectionView!.userInteractionEnabled = false
+        }
         if self.messageLbl != nil {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
                 self.messageLbl.alpha = 1.0

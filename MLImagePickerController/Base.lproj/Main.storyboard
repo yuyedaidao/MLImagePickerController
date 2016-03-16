@@ -18,27 +18,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efk-YS-knz">
-                                <rect key="frame" x="270" y="285" width="60" height="30"/>
+                                <rect key="frame" x="270" y="40" width="60" height="30"/>
                                 <state key="normal" title="选择相册"/>
                                 <connections>
                                     <action selector="selectPhoto" destination="BYZ-38-t0r" eventType="touchUpInside" id="WMH-MI-jd7"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ulh-wV-5mk">
+                                <rect key="frame" x="0.0" y="90" width="600" height="510"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="wNw-Ey-moR"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Plz-dh-zRZ"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="ulh-wV-5mk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9ej-eK-zzs"/>
+                            <constraint firstItem="ulh-wV-5mk" firstAttribute="top" secondItem="efk-YS-knz" secondAttribute="bottom" constant="20" id="Jqr-Xg-3C0"/>
+                            <constraint firstAttribute="trailing" secondItem="ulh-wV-5mk" secondAttribute="trailing" id="O43-S9-JcK"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="UQt-FY-saV"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ulh-wV-5mk" secondAttribute="bottom" id="m2a-wo-vas"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="efk-YS-knz" secondAttribute="bottom" constant="349" id="nTK-YN-wFv"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qZO-8q-Etp"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="201" id="xO6-wX-QzG"/>
+                            <constraint firstItem="efk-YS-knz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="ypp-0v-Rk7"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="UQt-FY-saV"/>
                                 <exclude reference="xO6-wX-QzG"/>
                                 <exclude reference="nTK-YN-wFv"/>
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="ulh-wV-5mk" id="r7i-cJ-eT8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
