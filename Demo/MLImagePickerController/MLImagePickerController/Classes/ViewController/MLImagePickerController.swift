@@ -20,23 +20,26 @@ class MLImagePickerController:  UIViewController,
                                 UITableViewDataSource,
                                 UITableViewDelegate
 {
+    private let CELL_MARGIN:CGFloat = 2
+    private let CELL_ROW:CGFloat = 3
+    private let SELECT_MAX_COUNT:Int = 9
+    private var fetchResult:PHFetchResult!
+    private var collectionView:UICollectionView?
+    private let selectImages:NSMutableArray = []
+    private let photoIdentifiers:NSMutableArray = []
+    private var groupTableView:UITableView?
+    private var groupSectionFetchResults:NSMutableArray = []
+    private var messageLbl:UILabel!
+    private var redTagLbl:UILabel!
+    private var titleBtn:UIButton!
+    private var AssetGridThumbnailSize:CGSize!
+    private var imageManager:PHCachingImageManager!
     
-    var fetchResult:PHFetchResult!
-    var collectionView:UICollectionView?
-    let CELL_MARGIN:CGFloat = 2
-    let CELL_ROW:CGFloat = 3
-    let SELECT_MAX_COUNT:Int = 9
-    var selectIndentifiers:NSMutableArray = []
-    let selectImages:NSMutableArray = []
-    let photoIdentifiers:NSMutableArray = []
-    var groupTableView:UITableView?
-    var groupSectionFetchResults:NSMutableArray = []
-    var messageLbl:UILabel!
+    // <MLImagePickerControllerDelegate>, SelectAssets CallBack
     var delegate:MLImagePickerControllerDelegate?
-    var redTagLbl:UILabel!
-    var titleBtn:UIButton!
-    var AssetGridThumbnailSize:CGSize!
-    var imageManager:PHCachingImageManager!
+    // Selected Indentifiers Assets
+    var selectIndentifiers:NSMutableArray = []
+    // Setting Max Multiselect Count
     var selectPickerMaxCount:Int?
     
     func show(vc:UIViewController!){
@@ -86,7 +89,7 @@ class MLImagePickerController:  UIViewController,
         self.collectionView?.reloadData()
     }
     
-    func setupNavigationBar(){
+    private func setupNavigationBar(){
         let titleBtn = UIButton(type: .Custom)
         titleBtn.frame = CGRectMake(0, 0, 200, 44)
         titleBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0)
@@ -119,14 +122,14 @@ class MLImagePickerController:  UIViewController,
         self.redTagLbl = redTagLbl
     }
     
-    func done(){
+    private func done(){
         if self.delegate != nil{
             self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
         }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func setupCollectionView(){
+    private func setupCollectionView(){
         let width = (self.view.frame.size.width - CELL_MARGIN * CELL_ROW + 1) / CELL_ROW;
         
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -144,7 +147,7 @@ class MLImagePickerController:  UIViewController,
         self.collectionView = assetsCollectionView
     }
     
-    func setupGroupTableView(){
+    private func setupGroupTableView(){
         if (self.groupTableView != nil){
             UIView.animateWithDuration(0.15, animations: { () -> Void in
                 self.groupTableView?.alpha = (self.groupTableView?.alpha == 1.0) ? 0.0 : 1.0
@@ -174,7 +177,7 @@ class MLImagePickerController:  UIViewController,
         }
     }
     
-    func tappenTitleView(){
+    private func tappenTitleView(){
         self.setupGroupTableView()
     }
     
@@ -275,7 +278,7 @@ class MLImagePickerController:  UIViewController,
         return 60
     }
     
-    func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
+    private func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
         let identifier = self.photoIdentifiers[indexPath.item]
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
         
@@ -319,7 +322,7 @@ class MLImagePickerController:  UIViewController,
         return true
     }
     
-    func showWatting(str:String){
+    private func showWatting(str:String){
         if self.collectionView != nil {
             self.collectionView!.userInteractionEnabled = false
         }
@@ -344,14 +347,14 @@ class MLImagePickerController:  UIViewController,
         }
     }
     
-    func hideWatting(){
+    private func hideWatting(){
         self.collectionView!.userInteractionEnabled = true
         UIView.animateWithDuration(0.25) { () -> Void in
             self.messageLbl.alpha = 0.0
         }
     }
     
-    func ml_imageFromBundleNamed(named:String)->UIImage{
+    private func ml_imageFromBundleNamed(named:String)->UIImage{
         let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
         return image
     }
