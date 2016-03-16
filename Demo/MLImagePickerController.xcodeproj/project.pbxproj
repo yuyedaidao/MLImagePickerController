@@ -12,14 +12,14 @@
 		480C7C081C96BD970002831A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 480C7C061C96BD970002831A /* Main.storyboard */; };
 		480C7C0A1C96BD970002831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 480C7C091C96BD970002831A /* Assets.xcassets */; };
 		480C7C0D1C96BD970002831A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 480C7C0B1C96BD970002831A /* LaunchScreen.storyboard */; };
-		482CF99B1C991D7000E7F226 /* MBIBDesignableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9911C991D7000E7F226 /* MBIBDesignableExtension.swift */; };
-		482CF99C1C991D7000E7F226 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9921C991D7000E7F226 /* UIImage+Extension.swift */; };
-		482CF99D1C991D7000E7F226 /* MLImagePickerAssetsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9941C991D7000E7F226 /* MLImagePickerAssetsCell.swift */; };
-		482CF99E1C991D7000E7F226 /* MLImagePickerAssetsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9951C991D7000E7F226 /* MLImagePickerAssetsCell.xib */; };
-		482CF99F1C991D7000E7F226 /* MLImagePickerGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9961C991D7000E7F226 /* MLImagePickerGroupCell.swift */; };
-		482CF9A01C991D7000E7F226 /* MLImagePickerGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9971C991D7000E7F226 /* MLImagePickerGroupCell.xib */; };
-		482CF9A11C991D7000E7F226 /* MLImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9991C991D7000E7F226 /* MLImagePickerController.swift */; };
-		482CF9A21C991D7000E7F226 /* ZLPhotoLib.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 482CF99A1C991D7000E7F226 /* ZLPhotoLib.bundle */; };
+		482CF9B01C9959E500E7F226 /* MBIBDesignableExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */; };
+		482CF9B11C9959E500E7F226 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */; };
+		482CF9B21C9959E500E7F226 /* MLImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */; };
+		482CF9B31C9959E500E7F226 /* MLImagePickerAssetsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AA1C9959E500E7F226 /* MLImagePickerAssetsCell.swift */; };
+		482CF9B41C9959E500E7F226 /* MLImagePickerAssetsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9AB1C9959E500E7F226 /* MLImagePickerAssetsCell.xib */; };
+		482CF9B51C9959E500E7F226 /* MLImagePickerGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AC1C9959E500E7F226 /* MLImagePickerGroupCell.swift */; };
+		482CF9B61C9959E500E7F226 /* MLImagePickerGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */; };
+		482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,14 +30,14 @@
 		480C7C091C96BD970002831A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		480C7C0C1C96BD970002831A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		480C7C0E1C96BD970002831A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		482CF9911C991D7000E7F226 /* MBIBDesignableExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBIBDesignableExtension.swift; sourceTree = "<group>"; };
-		482CF9921C991D7000E7F226 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
-		482CF9941C991D7000E7F226 /* MLImagePickerAssetsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerAssetsCell.swift; sourceTree = "<group>"; };
-		482CF9951C991D7000E7F226 /* MLImagePickerAssetsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerAssetsCell.xib; sourceTree = "<group>"; };
-		482CF9961C991D7000E7F226 /* MLImagePickerGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerGroupCell.swift; sourceTree = "<group>"; };
-		482CF9971C991D7000E7F226 /* MLImagePickerGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerGroupCell.xib; sourceTree = "<group>"; };
-		482CF9991C991D7000E7F226 /* MLImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerController.swift; sourceTree = "<group>"; };
-		482CF99A1C991D7000E7F226 /* ZLPhotoLib.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZLPhotoLib.bundle; sourceTree = "<group>"; };
+		482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBIBDesignableExtension.swift; sourceTree = "<group>"; };
+		482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLImagePickerController.bundle; sourceTree = "<group>"; };
+		482CF9AA1C9959E500E7F226 /* MLImagePickerAssetsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerAssetsCell.swift; sourceTree = "<group>"; };
+		482CF9AB1C9959E500E7F226 /* MLImagePickerAssetsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerAssetsCell.xib; sourceTree = "<group>"; };
+		482CF9AC1C9959E500E7F226 /* MLImagePickerGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerGroupCell.swift; sourceTree = "<group>"; };
+		482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerGroupCell.xib; sourceTree = "<group>"; };
+		482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +70,7 @@
 		480C7C011C96BD970002831A /* MLImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
-				482CF98F1C991D7000E7F226 /* Classes */,
+				482CF9A31C9959E400E7F226 /* MLImagePickerController */,
 				480C7C021C96BD970002831A /* AppDelegate.swift */,
 				480C7C041C96BD970002831A /* ViewController.swift */,
 				480C7C061C96BD970002831A /* Main.storyboard */,
@@ -81,41 +81,49 @@
 			path = MLImagePickerController;
 			sourceTree = "<group>";
 		};
-		482CF98F1C991D7000E7F226 /* Classes */ = {
+		482CF9A31C9959E400E7F226 /* MLImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
-				482CF9901C991D7000E7F226 /* Extension */,
-				482CF9931C991D7000E7F226 /* View */,
-				482CF9981C991D7000E7F226 /* ViewController */,
-				482CF99A1C991D7000E7F226 /* ZLPhotoLib.bundle */,
+				482CF9A41C9959E500E7F226 /* Classes */,
+			);
+			path = MLImagePickerController;
+			sourceTree = "<group>";
+		};
+		482CF9A41C9959E500E7F226 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				482CF9A51C9959E500E7F226 /* Extension */,
+				482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */,
+				482CF9A91C9959E500E7F226 /* View */,
+				482CF9AE1C9959E500E7F226 /* ViewController */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		482CF9901C991D7000E7F226 /* Extension */ = {
+		482CF9A51C9959E500E7F226 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				482CF9911C991D7000E7F226 /* MBIBDesignableExtension.swift */,
-				482CF9921C991D7000E7F226 /* UIImage+Extension.swift */,
+				482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */,
+				482CF9A71C9959E500E7F226 /* UIImage+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		482CF9931C991D7000E7F226 /* View */ = {
+		482CF9A91C9959E500E7F226 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				482CF9941C991D7000E7F226 /* MLImagePickerAssetsCell.swift */,
-				482CF9951C991D7000E7F226 /* MLImagePickerAssetsCell.xib */,
-				482CF9961C991D7000E7F226 /* MLImagePickerGroupCell.swift */,
-				482CF9971C991D7000E7F226 /* MLImagePickerGroupCell.xib */,
+				482CF9AA1C9959E500E7F226 /* MLImagePickerAssetsCell.swift */,
+				482CF9AB1C9959E500E7F226 /* MLImagePickerAssetsCell.xib */,
+				482CF9AC1C9959E500E7F226 /* MLImagePickerGroupCell.swift */,
+				482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		482CF9981C991D7000E7F226 /* ViewController */ = {
+		482CF9AE1C9959E500E7F226 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				482CF9991C991D7000E7F226 /* MLImagePickerController.swift */,
+				482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -179,11 +187,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				482CF9A21C991D7000E7F226 /* ZLPhotoLib.bundle in Resources */,
+				482CF9B61C9959E500E7F226 /* MLImagePickerGroupCell.xib in Resources */,
+				482CF9B21C9959E500E7F226 /* MLImagePickerController.bundle in Resources */,
 				480C7C0D1C96BD970002831A /* LaunchScreen.storyboard in Resources */,
-				482CF99E1C991D7000E7F226 /* MLImagePickerAssetsCell.xib in Resources */,
 				480C7C0A1C96BD970002831A /* Assets.xcassets in Resources */,
-				482CF9A01C991D7000E7F226 /* MLImagePickerGroupCell.xib in Resources */,
+				482CF9B41C9959E500E7F226 /* MLImagePickerAssetsCell.xib in Resources */,
 				480C7C081C96BD970002831A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,13 +203,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				482CF99F1C991D7000E7F226 /* MLImagePickerGroupCell.swift in Sources */,
+				482CF9B51C9959E500E7F226 /* MLImagePickerGroupCell.swift in Sources */,
 				480C7C051C96BD970002831A /* ViewController.swift in Sources */,
-				482CF99D1C991D7000E7F226 /* MLImagePickerAssetsCell.swift in Sources */,
+				482CF9B31C9959E500E7F226 /* MLImagePickerAssetsCell.swift in Sources */,
 				480C7C031C96BD970002831A /* AppDelegate.swift in Sources */,
-				482CF9A11C991D7000E7F226 /* MLImagePickerController.swift in Sources */,
-				482CF99B1C991D7000E7F226 /* MBIBDesignableExtension.swift in Sources */,
-				482CF99C1C991D7000E7F226 /* UIImage+Extension.swift in Sources */,
+				482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */,
+				482CF9B01C9959E500E7F226 /* MBIBDesignableExtension.swift in Sources */,
+				482CF9B11C9959E500E7F226 /* UIImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
