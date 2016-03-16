@@ -6,8 +6,8 @@ MLImagePickerController 使用Swift写的基于PhotoKit的简单易用的相册�
 演示项目
 ==============
 
-<img src="https://github.com/MakeZL/MLImagePickerController/DemoSketch/blob/master/Demo1.png" width="320"><br/>
-<img src="https://github.com/MakeZL/MLImagePickerController/DemoSketch/blob/master/Demo2.png" width="320"> 
+<img src="https://github.com/MakeZL/MLImagePickerController/blob/master/DemoSketch/Demo1.png" width="320"><br/>
+<img src="https://github.com/MakeZL/MLImagePickerController/blob/master/DemoSketch/Demo2.png" width="320"> 
 
 
 安装
