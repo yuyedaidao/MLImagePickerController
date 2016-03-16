@@ -195,6 +195,7 @@ class MLImagePickerController:  UIViewController,
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
         cell.selectButtonSelected = self.selectIndentifier.containsObject(cell.localIdentifier)
+        cell.isShowVideo = (asset.mediaType == .Video)
         
         self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
             

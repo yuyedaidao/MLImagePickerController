@@ -16,9 +16,16 @@ class MLImagePickerAssetsCell: UICollectionViewCell {
 
     @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var imageV: UIImageView!
+    @IBOutlet weak var videoMaskImgV:UIImageView!
+    
     var delegate:MLImagePickerAssetsCellDelegate?
     var localIdentifier:String!
     var indexPath:NSIndexPath!
+    var isShowVideo:Bool!{ // Default is Hide
+        didSet{
+            self.videoMaskImgV.hidden = !isShowVideo
+        }
+    }
     var selectButtonSelected:Bool! {
         didSet{
             if self.selectButton.selected == selectButtonSelected {
@@ -34,15 +41,14 @@ class MLImagePickerAssetsCell: UICollectionViewCell {
         let noImage = self.ml_imageFromBundleNamed("zl_icon_image_no") as UIImage
         let yesImage = self.ml_imageFromBundleNamed("zl_icon_image_yes") as UIImage
         
+        self.videoMaskImgV.image = self.ml_imageFromBundleNamed("zl_video-play") as UIImage
         self.selectButton.setImage(noImage, forState: .Normal)
         self.selectButton.setImage(yesImage, forState: .Selected)
     }
 
     func ml_imageFromBundleNamed(named:String)->UIImage{
         let image = UIImage(named: "ZLPhotoLib.bundle".stringByAppendingString("/"+(named as String)))!
-return image
-//        let data = NSData(data: UIImagePNGRepresentation(image)!)
-//        return UIImage(data: data)!
+        return image
     }
     
     @IBAction func selectPhoto() {
