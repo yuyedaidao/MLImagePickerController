@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 protocol MLImagePickerControllerDelegate {
-    func imagePickerDidSelectedAssets(assets:NSArray)
+    func imagePickerDidSelectedAssets(assets:NSArray, assetIdentifiers:NSArray)
 }
 
 class MLImagePickerController:  UIViewController,
@@ -25,7 +25,7 @@ class MLImagePickerController:  UIViewController,
     var collectionView:UICollectionView?
     let CELL_MARGIN:CGFloat = 2
     let CELL_ROW:CGFloat = 3
-    let selectIndentifier:NSMutableArray = []
+    var selectIndentifiers:NSMutableArray = []
     let selectImages:NSMutableArray = []
     let photoIdentifiers:NSMutableArray = []
     var groupTableView:UITableView?
@@ -40,13 +40,9 @@ class MLImagePickerController:  UIViewController,
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
         imagePickerVc.delegate = self.delegate
+        imagePickerVc.selectIndentifiers = selectIndentifiers
         let navigationVc = UINavigationController(rootViewController: imagePickerVc)
         vc.presentViewController(navigationVc, animated: true, completion: nil)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
     }
     
     override func viewDidLoad() {
@@ -76,15 +72,14 @@ class MLImagePickerController:  UIViewController,
         for (var i = 0; i < result.count; i++){
             let asset:PHAsset = result[i] as! PHAsset
             self.photoIdentifiers.addObject(asset.localIdentifier)
+            
+            if self.selectIndentifiers.containsObject(asset.localIdentifier) == true {
+                self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+                    self.selectImages.addObject(image!)
+                }
+            }
         }
         self.collectionView?.reloadData()
-//        self.showWatting()
-//        self.collectionView?.reloadData()
-//        for (var i = 0; i < result.count; i++){
-//            
-//            
-//        }
-        
     }
     
     func setupNavigationBar(){
@@ -105,7 +100,8 @@ class MLImagePickerController:  UIViewController,
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
         
         let redTagLbl = UILabel()
-        redTagLbl.hidden = true
+        redTagLbl.hidden = (self.selectIndentifiers.count == 0)
+        redTagLbl.text = "\(self.selectIndentifiers.count)"
         redTagLbl.layer.cornerRadius = 8.0
         redTagLbl.layer.masksToBounds = true
         redTagLbl.backgroundColor = UIColor.redColor()
@@ -119,7 +115,7 @@ class MLImagePickerController:  UIViewController,
     
     func done(){
         if self.delegate != nil{
-            self.delegate?.imagePickerDidSelectedAssets(self.selectImages)
+            self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
         }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -194,7 +190,7 @@ class MLImagePickerController:  UIViewController,
         cell.delegate = self
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
-        cell.selectButtonSelected = self.selectIndentifier.containsObject(cell.localIdentifier)
+        cell.selectButtonSelected = self.selectIndentifiers.containsObject(cell.localIdentifier)
         cell.isShowVideo = (asset.mediaType == .Video)
         
         self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
@@ -279,17 +275,17 @@ class MLImagePickerController:  UIViewController,
         
         if selected == true {
             // Insert
-            self.selectIndentifier.addObject(identifier)
+            self.selectIndentifiers.addObject(identifier)
         }else{
             // Delete
-            if selectIndentifier.containsObject(identifier) {
-                let index = self.selectIndentifier.indexOfObject(identifier)
+            if selectIndentifiers.containsObject(identifier) {
+                let index = self.selectIndentifiers.indexOfObject(identifier)
                 self.selectImages.removeObjectAtIndex(index)
             }
-            self.selectIndentifier.removeObject(identifier)
+            self.selectIndentifiers.removeObject(identifier)
             
-            self.redTagLbl.hidden = (self.selectImages.count == 0)
-            self.redTagLbl.text = "\(self.selectImages.count)"
+            self.redTagLbl.hidden = (self.selectIndentifiers.count == 0)
+            self.redTagLbl.text = "\(self.selectIndentifiers.count)"
             
             return
         }
@@ -302,8 +298,8 @@ class MLImagePickerController:  UIViewController,
             if image != nil {
                 self.selectImages.addObject(image!)
                 
-                self.redTagLbl.hidden = (self.selectImages.count == 0)
-                self.redTagLbl.text = "\(self.selectImages.count)"
+                self.redTagLbl.hidden = (self.selectIndentifiers.count == 0)
+                self.redTagLbl.text = "\(self.selectIndentifiers.count)"
             }
         }
         

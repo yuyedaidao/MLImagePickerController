@@ -16,6 +16,7 @@ class ViewController: UIViewController,
 
     @IBOutlet weak var tableView: UITableView!
     var assets:NSArray? = []
+    var assetIdentifiers:NSArray? = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +32,8 @@ class ViewController: UIViewController,
     @IBAction func selectPhoto() {
         let pickerVc = MLImagePickerController()
         pickerVc.delegate = self
+        pickerVc.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
         pickerVc.show(self)
-//        let navVc = UINavigationController.init(rootViewController: pickerVc)
-
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -46,8 +46,9 @@ class ViewController: UIViewController,
         return cell!
     }
     
-    func imagePickerDidSelectedAssets(assets: NSArray) {
+    func imagePickerDidSelectedAssets(assets: NSArray, assetIdentifiers: NSArray) {
         self.assets = assets
+        self.assetIdentifiers = assetIdentifiers
         self.tableView.reloadData()
     }
 
