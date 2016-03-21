@@ -8,6 +8,7 @@
 //  issue: https://github.com/MakeZL/MLImagePickerController/issues/new
 
 import UIKit
+import PhotosUI
 
 protocol MLImagePickerAssetsCellDelegate {
     func imagePickerSelectAssetsCellWithSelected(indexPath:NSIndexPath,let selected:Bool) -> Bool;
@@ -19,6 +20,7 @@ class MLImagePickerAssetsCell: UICollectionViewCell {
     @IBOutlet weak var imageV: UIImageView!
     @IBOutlet weak var videoMaskImgV:UIImageView!
     
+    var asset:PHAsset!
     var delegate:MLImagePickerAssetsCellDelegate?
     var localIdentifier:String!
     var indexPath:NSIndexPath!

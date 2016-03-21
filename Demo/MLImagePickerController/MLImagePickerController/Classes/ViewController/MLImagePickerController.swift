@@ -87,6 +87,8 @@ class MLImagePickerController:  UIViewController,
             }
         }
         self.collectionView?.reloadData()
+        self.collectionView?.layoutIfNeeded()
+        self.scrollViewDidEndDecelerating(self.collectionView!)
     }
     
     private func setupNavigationBar(){
@@ -122,7 +124,7 @@ class MLImagePickerController:  UIViewController,
         self.redTagLbl = redTagLbl
     }
     
-    private func done(){
+    func done(){
         if self.delegate != nil{
             self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
         }
@@ -177,7 +179,7 @@ class MLImagePickerController:  UIViewController,
         }
     }
     
-    private func tappenTitleView(){
+    func tappenTitleView(){
         self.setupGroupTableView()
     }
     
@@ -197,19 +199,23 @@ class MLImagePickerController:  UIViewController,
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
         
         cell.delegate = self
+        cell.asset=asset
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
         cell.selectButtonSelected = self.selectIndentifiers.containsObject(cell.localIdentifier)
         cell.isShowVideo = (asset.mediaType == .Video)
         
-        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.deliveryMode = .FastFormat
+        requestOptions.networkAccessAllowed = true
+        
+        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
             
             // Set the cell's thumbnail image if it's still showing the same asset.
             if (cell.localIdentifier == asset.localIdentifier) {
                 cell.imageV.image = image;
             }
         }
-        
         
         return cell
     }
@@ -218,6 +224,7 @@ class MLImagePickerController:  UIViewController,
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.groupSectionFetchResults.count
     }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
@@ -271,7 +278,8 @@ class MLImagePickerController:  UIViewController,
             self.photoIdentifiers.addObject(asset.localIdentifier)
         }
         self.collectionView?.reloadData()
-        
+        self.collectionView?.layoutIfNeeded()
+        self.scrollViewDidEndDecelerating(self.collectionView!)
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -361,5 +369,17 @@ class MLImagePickerController:  UIViewController,
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.isKindOfClass(UICollectionView) == true {
+            for var cell:MLImagePickerAssetsCell in self.collectionView?.visibleCells() as! [MLImagePickerAssetsCell]  {
+                self.imageManager.requestImageForAsset(cell.asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+                    if (cell.localIdentifier == cell.asset.localIdentifier) {
+                        cell.imageV.image = image;
+                    }
+                }
+            }
+        }
     }
 }
