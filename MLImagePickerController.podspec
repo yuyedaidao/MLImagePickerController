@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MLImagePickerController"
-  s.version      = "0.2.2"
+  s.version      = "0.2.3"
   s.summary      = "MLImagePickerController Swift written using PhotoKit easy to use multi album Library Based on."
 
   s.description  = <<-DESC
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/MakeZL/MLImagePickerController"
 
   s.license      = { :type => "MIT", :file => "LICENSE" }
-
+ 
   s.author             = { "Leo" => "120886865@qq.com" }
   s.social_media_url   = "http://weibo.com/MakeZL"
 

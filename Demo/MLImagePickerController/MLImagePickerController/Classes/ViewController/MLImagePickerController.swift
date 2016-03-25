@@ -13,6 +13,11 @@ protocol MLImagePickerControllerDelegate {
     func imagePickerDidSelectedAssets(assets:NSArray, assetIdentifiers:NSArray)
 }
 
+
+private let CELL_MARGIN:CGFloat = 2
+private let CELL_ROW:CGFloat = 3
+private let SELECT_MAX_COUNT:Int = 9
+
 class MLImagePickerController:  UIViewController,
                                 UICollectionViewDataSource,
                                 UICollectionViewDelegate,
@@ -20,9 +25,6 @@ class MLImagePickerController:  UIViewController,
                                 UITableViewDataSource,
                                 UITableViewDelegate
 {
-    private let CELL_MARGIN:CGFloat = 2
-    private let CELL_ROW:CGFloat = 3
-    private let SELECT_MAX_COUNT:Int = 9
     private var fetchResult:PHFetchResult!
     private var collectionView:UICollectionView?
     private let selectImages:NSMutableArray = []
@@ -34,6 +36,7 @@ class MLImagePickerController:  UIViewController,
     private var titleBtn:UIButton!
     private var AssetGridThumbnailSize:CGSize!
     private var imageManager:PHCachingImageManager!
+    private var tableViewSelectedIndexPath:NSIndexPath!
     
     // <MLImagePickerControllerDelegate>, SelectAssets CallBack
     var delegate:MLImagePickerControllerDelegate?
@@ -57,6 +60,7 @@ class MLImagePickerController:  UIViewController,
         
         self.imageManager = PHCachingImageManager()
         self.imageManager.stopCachingImagesForAllAssets()
+        self.tableViewSelectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
         
         let scale = UIScreen.mainScreen().scale
         let width = (self.view.frame.size.width - CELL_MARGIN * CELL_ROW + 1) / CELL_ROW;
@@ -249,11 +253,14 @@ class MLImagePickerController:  UIViewController,
             cell.assetCountLbl.text = "\(result.count)"
         }
         
+        cell.selectedStatus = (self.tableViewSelectedIndexPath.section == indexPath.section && self.tableViewSelectedIndexPath.row == indexPath.row)
+        
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        self.tableViewSelectedIndexPath = indexPath
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.setupGroupTableView()
         self.photoIdentifiers.removeAllObjects()
@@ -277,6 +284,7 @@ class MLImagePickerController:  UIViewController,
             let asset:PHAsset = fetchResult[i] as! PHAsset
             self.photoIdentifiers.addObject(asset.localIdentifier)
         }
+        self.groupTableView?.reloadData()
         self.collectionView?.reloadData()
         self.collectionView?.layoutIfNeeded()
         self.scrollViewDidEndDecelerating(self.collectionView!)
