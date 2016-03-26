@@ -35,6 +35,20 @@ class ViewController: UIViewController,
         pickerVc.show(self)
     }
     
+    @IBAction func quick() {
+        let quickView = MLImagePickerQuickView(frame: CGRectMake(0, self.view.frame.height - 250, self.view.frame.width, 250))
+        quickView.delegate = self
+        // 最大图片个数
+        quickView.selectPickerMaxCount = 20
+        // 默认记录选择的图片
+        quickView.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
+        // 如果不传的话，预览不能打开相册
+        quickView.viewControllerReponse = self
+        // 准备工作
+        quickView.prepareForInterfaceBuilderAndData()
+        self.view.addSubview(quickView)
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.assets != nil ? self.assets!.count : 0
     }

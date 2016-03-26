@@ -121,7 +121,6 @@ class MLImagePickerController:  UIViewController,
         navigationItemRightBtn.frame = CGRectMake(0, 0, 30, 44)
         navigationItemRightBtn.setTitle("完成", forState: .Normal)
         
-//        navigationItemRightBtn.setTitleColor(UIColor(red: 85/256.0, green: 85/256.0, blue: 85/256.0, alpha: 1.0), forState: .Normal)
         navigationItemRightBtn.setTitleColor(UIColor(red: 49/256.0, green: 105/256.0, blue: 245/256.0, alpha: 1.0), forState: .Normal)
         
         navigationItemRightBtn.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
@@ -226,7 +225,7 @@ class MLImagePickerController:  UIViewController,
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
         
         cell.delegate = self
-        cell.asset=asset
+        cell.asset = asset
         cell.indexPath = indexPath
         cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
         cell.selectButtonSelected = self.selectIndentifiers.containsObject(cell.localIdentifier)
@@ -404,7 +403,6 @@ class MLImagePickerController:  UIViewController,
             self.messageLbl.alpha = 0.0
         }
     }
-    
     
     private func ml_imageFromBundleNamed(named:String)->UIImage{
         let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!

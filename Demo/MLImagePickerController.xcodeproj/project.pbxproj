@@ -19,6 +19,7 @@
 		482CF9B51C9959E500E7F226 /* MLImagePickerGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AC1C9959E500E7F226 /* MLImagePickerGroupCell.swift */; };
 		482CF9B61C9959E500E7F226 /* MLImagePickerGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */; };
 		482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */; };
+		48411AB01CA67C67003B8910 /* MLImagePickerQuickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */; };
 		48A5267C1CA51C1E00290AB7 /* MLImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A5267B1CA51C1E00290AB7 /* MLImageBrowserViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		482CF9AC1C9959E500E7F226 /* MLImagePickerGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerGroupCell.swift; sourceTree = "<group>"; };
 		482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerGroupCell.xib; sourceTree = "<group>"; };
 		482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerController.swift; sourceTree = "<group>"; };
+		48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerQuickView.swift; sourceTree = "<group>"; };
 		48A5267B1CA51C1E00290AB7 /* MLImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MLImageBrowserViewController.swift; path = MLImagePickerController/MLImagePickerController/Classes/ViewController/MLImageBrowserViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -124,6 +126,7 @@
 			children = (
 				48A5267B1CA51C1E00290AB7 /* MLImageBrowserViewController.swift */,
 				482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */,
+				48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 			files = (
 				482CF9B51C9959E500E7F226 /* MLImagePickerGroupCell.swift in Sources */,
 				48A5267C1CA51C1E00290AB7 /* MLImageBrowserViewController.swift in Sources */,
+				48411AB01CA67C67003B8910 /* MLImagePickerQuickView.swift in Sources */,
 				480C7C051C96BD970002831A /* ViewController.swift in Sources */,
 				482CF9B31C9959E500E7F226 /* MLImagePickerAssetsCell.swift in Sources */,
 				480C7C031C96BD970002831A /* AppDelegate.swift in Sources */,

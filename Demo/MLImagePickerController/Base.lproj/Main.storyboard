@@ -17,13 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efk-YS-knz">
-                                <rect key="frame" x="270" y="40" width="60" height="30"/>
-                                <state key="normal" title="选择相册"/>
-                                <connections>
-                                    <action selector="selectPhoto" destination="BYZ-38-t0r" eventType="touchUpInside" id="WMH-MI-jd7"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ulh-wV-5mk">
                                 <rect key="frame" x="0.0" y="90" width="600" height="510"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -32,22 +25,53 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Plz-dh-zRZ"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bkF-Dc-CeE">
+                                <rect key="frame" x="240" y="40" width="60" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="JKz-Au-URr"/>
+                                </constraints>
+                                <state key="normal" title="选择相册"/>
+                                <connections>
+                                    <action selector="selectPhoto" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qdi-TN-S4f"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efk-YS-knz">
+                                <rect key="frame" x="330" y="40" width="60" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="DWP-dH-73R"/>
+                                </constraints>
+                                <state key="normal" title="快速预览"/>
+                                <connections>
+                                    <action selector="quick" destination="BYZ-38-t0r" eventType="touchUpInside" id="xSX-pl-LmH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="efk-YS-knz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="60" id="4hi-NN-le7"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="efk-YS-knz" secondAttribute="trailing" constant="20" id="86m-NR-gI5"/>
                             <constraint firstItem="ulh-wV-5mk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="9ej-eK-zzs"/>
+                            <constraint firstItem="bkF-Dc-CeE" firstAttribute="bottom" secondItem="efk-YS-knz" secondAttribute="bottom" id="FPQ-Y0-X7O"/>
                             <constraint firstItem="ulh-wV-5mk" firstAttribute="top" secondItem="efk-YS-knz" secondAttribute="bottom" constant="20" id="Jqr-Xg-3C0"/>
                             <constraint firstAttribute="trailing" secondItem="ulh-wV-5mk" secondAttribute="trailing" id="O43-S9-JcK"/>
+                            <constraint firstItem="bkF-Dc-CeE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="-20" id="PCi-c6-Alc"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="UQt-FY-saV"/>
+                            <constraint firstItem="efk-YS-knz" firstAttribute="leading" secondItem="bkF-Dc-CeE" secondAttribute="trailing" constant="30" id="URB-Pb-Ve2"/>
+                            <constraint firstItem="bkF-Dc-CeE" firstAttribute="top" secondItem="efk-YS-knz" secondAttribute="top" id="akQ-ka-w1g"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ulh-wV-5mk" secondAttribute="bottom" id="m2a-wo-vas"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="efk-YS-knz" secondAttribute="bottom" constant="349" id="nTK-YN-wFv"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qZO-8q-Etp"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="201" id="xO6-wX-QzG"/>
                             <constraint firstItem="efk-YS-knz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="ypp-0v-Rk7"/>
+                            <constraint firstItem="bkF-Dc-CeE" firstAttribute="leading" secondItem="efk-YS-knz" secondAttribute="trailing" constant="15" id="yw8-z7-yeT"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="PCi-c6-Alc"/>
+                                <exclude reference="yw8-z7-yeT"/>
+                                <exclude reference="86m-NR-gI5"/>
                                 <exclude reference="UQt-FY-saV"/>
+                                <exclude reference="qZO-8q-Etp"/>
                                 <exclude reference="xO6-wX-QzG"/>
                                 <exclude reference="nTK-YN-wFv"/>
                             </mask>
