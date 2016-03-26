@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MLImagePickerController"
-  s.version      = "0.2.3"
+  s.version      = "0.3"
   s.summary      = "MLImagePickerController Swift written using PhotoKit easy to use multi album Library Based on."
 
   s.description  = <<-DESC
