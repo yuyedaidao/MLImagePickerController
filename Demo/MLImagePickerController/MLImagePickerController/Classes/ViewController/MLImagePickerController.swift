@@ -13,10 +13,11 @@ protocol MLImagePickerControllerDelegate {
     func imagePickerDidSelectedAssets(assets:NSArray, assetIdentifiers:NSArray)
 }
 
-
-private let CELL_MARGIN:CGFloat = 2
-private let CELL_ROW:CGFloat = 3
-private let SELECT_MAX_COUNT:Int = 9
+private let MLImagePickerCellMargin:CGFloat = 2
+private let MLImagePickerCellRowCount:CGFloat = 3
+private let MLImagePickerMaxCount:Int = 9
+private let MLImagePickerUIScreenScale = UIScreen.mainScreen().scale
+private let MLImagePickerCellWidth = (UIScreen.mainScreen().bounds.size.width - MLImagePickerCellMargin * MLImagePickerCellRowCount + 1) / MLImagePickerCellRowCount
 
 class MLImagePickerController:  UIViewController,
                                 UICollectionViewDataSource,
@@ -31,7 +32,7 @@ class MLImagePickerController:  UIViewController,
     private var groupSectionFetchResults:NSMutableArray = []
     private var AssetGridThumbnailSize:CGSize!
     private var imageManager:PHCachingImageManager!
-    private var tableViewSelectedIndexPath:NSIndexPath!
+    private var tableViewSelectedIndexPath:NSIndexPath! = NSIndexPath(forRow: 0, inSection: 0)
     
     private var collectionView:UICollectionView?
     private var navigationItemRightBtn:UIButton!
@@ -54,7 +55,7 @@ class MLImagePickerController:  UIViewController,
         let imagePickerVc = MLImagePickerController()
         imagePickerVc.delegate = self.delegate
         imagePickerVc.selectIndentifiers = selectIndentifiers
-        imagePickerVc.selectPickerMaxCount = self.selectPickerMaxCount == nil ? SELECT_MAX_COUNT : self.selectPickerMaxCount
+        imagePickerVc.selectPickerMaxCount = self.selectPickerMaxCount == nil ? MLImagePickerMaxCount : self.selectPickerMaxCount
         
         let navigationVc = UINavigationController(rootViewController: imagePickerVc)
         vc.presentViewController(navigationVc, animated: true, completion: nil)
@@ -63,22 +64,22 @@ class MLImagePickerController:  UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.imageManager = PHCachingImageManager()
-        self.imageManager.stopCachingImagesForAllAssets()
-        self.tableViewSelectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-        
-        let scale = UIScreen.mainScreen().scale
-        let width = (self.view.frame.size.width - CELL_MARGIN * CELL_ROW + 1) / CELL_ROW;
-        AssetGridThumbnailSize = CGSizeMake(width * scale, width * scale);
-        
         self.view.backgroundColor = UIColor.whiteColor()
+
         self.setupNavigationBar()
         self.setupCollectionView()
+        self.initialization();
+    }
+    
+    private func initialization(){
+        self.imageManager = PHCachingImageManager()
+        self.imageManager.stopCachingImagesForAllAssets()
+        AssetGridThumbnailSize = CGSizeMake(MLImagePickerCellWidth * MLImagePickerUIScreenScale, MLImagePickerCellWidth * MLImagePickerUIScreenScale);
         
         let options:PHFetchOptions = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result:PHFetchResult = PHAsset.fetchAssetsWithOptions(options)
-
+        
         let requestOptions = PHImageRequestOptions()
         requestOptions.deliveryMode = .FastFormat
         requestOptions.networkAccessAllowed = true
@@ -100,26 +101,6 @@ class MLImagePickerController:  UIViewController,
         
         if self.cancleLongGestureScrollSelectedPicker == false {
             self.collectionView?.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressGestureScrollPhoto:"))
-        }
-    }
-    
-    func longPressGestureScrollPhoto(gesture:UILongPressGestureRecognizer){
-        let point = gesture.locationInView(self.collectionView)
-        
-        for var cell:MLImagePickerAssetsCell in self.collectionView!.visibleCells() as! Array<MLImagePickerAssetsCell>{
-            if ((CGRectGetMaxY(cell.frame) > point.y && CGRectGetMaxY(cell.frame) - point.y <= cell.frame.height) == true &&
-                (CGRectGetMaxX(cell.frame) > point.x && CGRectGetMaxX(cell.frame) - point.x <= cell.frame.width)
-                ) == true {
-                let indexPath = self.collectionView?.indexPathForCell(cell)
-                    
-                if (self.checkBeyondMaxSelectPickerCount() == false){
-                    return
-                }
-                cell.selectButtonSelected = true
-                self.imagePickerSelectAssetsCellWithSelected(indexPath!, selected: true)
-            }else{
-                
-            }
         }
     }
     
@@ -169,7 +150,7 @@ class MLImagePickerController:  UIViewController,
     }
     
     private func setupCollectionView(){
-        let width = (self.view.frame.size.width - CELL_MARGIN * CELL_ROW + 1) / CELL_ROW;
+        let width = (self.view.frame.size.width - MLImagePickerCellMargin * MLImagePickerCellRowCount + 1) / MLImagePickerCellRowCount;
         
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
         collectionViewFlowLayout.scrollDirection = .Vertical
@@ -196,7 +177,6 @@ class MLImagePickerController:  UIViewController,
             let groupTableContainerView = UIView(frame: self.view.bounds)
             groupTableContainerView.alpha = 0.0
             groupTableContainerView.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
-            groupTableContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "setupGroupTableView"))
             self.view.addSubview(groupTableContainerView)
             self.groupTableContainerView = groupTableContainerView
             
@@ -207,6 +187,11 @@ class MLImagePickerController:  UIViewController,
             groupTableView.delegate = self
             self.groupTableContainerView!.addSubview(groupTableView)
             self.groupTableView = groupTableView
+            
+            let groupBackgroundView = UIView(frame: CGRectMake(0, CGRectGetMaxY(groupTableView.frame), groupTableContainerView.frame.width, groupTableContainerView.frame.height - CGRectGetMaxY(groupTableView.frame)))
+            groupBackgroundView.backgroundColor = UIColor.clearColor()
+            groupBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "setupGroupTableView"))
+            self.groupTableContainerView!.addSubview(groupBackgroundView)
             
             let options:PHFetchOptions = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -226,7 +211,7 @@ class MLImagePickerController:  UIViewController,
         self.setupGroupTableView()
     }
     
-    // MARK: UICollectionViewDataSource
+    // MARK: UICollectionViewDataSource && UICollectionViewDelegate
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -262,7 +247,7 @@ class MLImagePickerController:  UIViewController,
         return cell
     }
     
-    // MARK TableViewDataSource
+    // MARK: UITableViewDataSource && UITableViewDelegate
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.groupSectionFetchResults.count
     }
@@ -332,6 +317,7 @@ class MLImagePickerController:  UIViewController,
         return 60
     }
     
+    // MARK: MLImagePickerAssetsCellDelegate
     func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
         let identifier = self.photoIdentifiers[indexPath.item]
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
@@ -376,7 +362,7 @@ class MLImagePickerController:  UIViewController,
         return true
     }
     
-    func checkBeyondMaxSelectPickerCount()->Bool{
+    private func checkBeyondMaxSelectPickerCount()->Bool{
         if (self.selectIndentifiers.count >= self.selectPickerMaxCount) {
             self.showWatting("选择照片不能超过\(self.selectPickerMaxCount!)张")
             UIView.animateWithDuration(1.0, animations: { () -> Void in
@@ -419,15 +405,34 @@ class MLImagePickerController:  UIViewController,
         }
     }
     
+    
     private func ml_imageFromBundleNamed(named:String)->UIImage{
         let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
         return image
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    // MARK: GestureRecognizer
+    func longPressGestureScrollPhoto(gesture:UILongPressGestureRecognizer){
+        let point = gesture.locationInView(self.collectionView)
         
+        for var cell:MLImagePickerAssetsCell in self.collectionView!.visibleCells() as! Array<MLImagePickerAssetsCell>{
+            if ((CGRectGetMaxY(cell.frame) > point.y && CGRectGetMaxY(cell.frame) - point.y <= cell.frame.height) == true &&
+                (CGRectGetMaxX(cell.frame) > point.x && CGRectGetMaxX(cell.frame) - point.x <= cell.frame.width)
+                ) == true {
+                    let indexPath = self.collectionView?.indexPathForCell(cell)
+                    
+                    if (self.checkBeyondMaxSelectPickerCount() == false){
+                        return
+                    }
+                    cell.selectButtonSelected = true
+                    self.imagePickerSelectAssetsCellWithSelected(indexPath!, selected: true)
+            }else{
+                
+            }
+        }
     }
     
+    // MARK: UIScrollViewDelegate
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if scrollView.isKindOfClass(UICollectionView) == true {
             for var cell:MLImagePickerAssetsCell in self.collectionView?.visibleCells() as! [MLImagePickerAssetsCell]  {
