@@ -18,6 +18,7 @@ class ViewController: UIViewController,
     @IBOutlet weak var tableView: UITableView!
     var assets:NSArray? = []
     var assetIdentifiers:NSArray? = []
+    var quickView:MLImagePickerQuickView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,10 @@ class ViewController: UIViewController,
     }
     
     @IBAction func quick() {
+        if self.quickView != nil {
+            return
+        }
+        
         let quickView = MLImagePickerQuickView(frame: CGRectMake(0, self.view.frame.height - 250, self.view.frame.width, 250))
         quickView.delegate = self
         // 最大图片个数
@@ -47,6 +52,7 @@ class ViewController: UIViewController,
         // 准备工作
         quickView.prepareForInterfaceBuilderAndData()
         self.view.addSubview(quickView)
+        self.quickView = quickView
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
