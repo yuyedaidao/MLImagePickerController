@@ -29,7 +29,7 @@ class ViewController: UIViewController,
         // 回调
         pickerVc.delegate = self
         // 最大图片个数
-        pickerVc.selectPickerMaxCount = 5
+        pickerVc.selectPickerMaxCount = 20
         // 默认记录选择的图片
         pickerVc.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
         pickerVc.show(self)
