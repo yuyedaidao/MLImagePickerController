@@ -17,14 +17,8 @@ class MLImagePickerGroupCell: UITableViewCell {
     var selectedStatus:Bool! = false {
         didSet{
             self.selectedImgV.hidden = !self.selectedStatus
-            self.selectedImgV.image = self.ml_imageFromBundleNamed("zl_star");
+            self.selectedImgV.image = UIImage.ml_imageFromBundleNamed("zl_star");
         }
     }
-    
-    private func ml_imageFromBundleNamed(named:String)->UIImage{
-        let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
-        return image
-    }
-    
     
 }

@@ -41,17 +41,12 @@ class MLImagePickerAssetsCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let noImage = self.ml_imageFromBundleNamed("zl_icon_image_no") as UIImage
-        let yesImage = self.ml_imageFromBundleNamed("zl_icon_image_yes") as UIImage
+        let noImage = UIImage.ml_imageFromBundleNamed("zl_icon_image_no") as UIImage
+        let yesImage = UIImage.ml_imageFromBundleNamed("zl_icon_image_yes") as UIImage
         
-        self.videoMaskImgV.image = self.ml_imageFromBundleNamed("zl_video-play") as UIImage
+        self.videoMaskImgV.image = UIImage.ml_imageFromBundleNamed("zl_video-play") as UIImage
         self.selectButton.setImage(noImage, forState: .Normal)
         self.selectButton.setImage(yesImage, forState: .Selected)
-    }
-
-    func ml_imageFromBundleNamed(named:String)->UIImage{
-        let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
-        return image
     }
     
     @IBAction func selectPhoto() {

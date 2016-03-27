@@ -37,9 +37,7 @@ class ViewController: UIViewController,
     }
     
     @IBAction func quick() {
-        if self.quickView != nil {
-            return
-        }
+        self.quickView?.removeFromSuperview()
         
         let quickView = MLImagePickerQuickView(frame: CGRectMake(0, self.view.frame.height - 250, self.view.frame.width, 250))
         quickView.delegate = self

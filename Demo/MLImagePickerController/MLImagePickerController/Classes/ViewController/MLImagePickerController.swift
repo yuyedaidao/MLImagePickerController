@@ -31,7 +31,7 @@ class MLImagePickerController:  UIViewController,
     private let photoIdentifiers:NSMutableArray = []
     private var groupSectionFetchResults:NSMutableArray = []
     private var AssetGridThumbnailSize:CGSize!
-    private var imageManager:PHCachingImageManager!
+    private var imageManager:MLImagePickerAssetsManger!
     private var tableViewSelectedIndexPath:NSIndexPath! = NSIndexPath(forRow: 0, inSection: 0)
     
     private var collectionView:UICollectionView?
@@ -72,21 +72,17 @@ class MLImagePickerController:  UIViewController,
     }
     
     private func initialization(){
-        self.imageManager = PHCachingImageManager()
-        self.imageManager.stopCachingImagesForAllAssets()
-        AssetGridThumbnailSize = CGSizeMake(MLImagePickerCellWidth * MLImagePickerUIScreenScale, MLImagePickerCellWidth * MLImagePickerUIScreenScale);
         
-        let options:PHFetchOptions = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result:PHFetchResult = PHAsset.fetchAssetsWithOptions(options)
+        self.imageManager = MLImagePickerAssetsManger()
+        self.fetchResult = self.imageManager.result()
+        AssetGridThumbnailSize = CGSizeMake(MLImagePickerCellWidth * MLImagePickerUIScreenScale, MLImagePickerCellWidth * MLImagePickerUIScreenScale);
         
         let requestOptions = PHImageRequestOptions()
         requestOptions.deliveryMode = .FastFormat
         requestOptions.networkAccessAllowed = true
-        self.fetchResult = result
         
-        for (var i = 0; i < result.count; i++){
-            let asset:PHAsset = result[i] as! PHAsset
+        for (var i = 0; i < self.fetchResult.count; i++){
+            let asset:PHAsset = self.fetchResult[i] as! PHAsset
             self.photoIdentifiers.addObject(asset.localIdentifier)
             
             if self.selectIndentifiers.containsObject(asset.localIdentifier) == true {
@@ -112,7 +108,8 @@ class MLImagePickerController:  UIViewController,
         titleBtn.setTitleColor(UIColor.grayColor(), forState: .Normal)
         titleBtn.setTitle("所有图片", forState: .Normal)
         titleBtn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
-        titleBtn.setImage(self.ml_imageFromBundleNamed("zl_xialajiantou"), forState: .Normal)
+
+        titleBtn.setImage(UIImage.ml_imageFromBundleNamed("zl_xialajiantou"), forState: .Normal)
         self.navigationItem.titleView = titleBtn
         self.titleBtn = titleBtn
         
@@ -363,50 +360,13 @@ class MLImagePickerController:  UIViewController,
     
     private func checkBeyondMaxSelectPickerCount()->Bool{
         if (self.selectIndentifiers.count >= self.selectPickerMaxCount) {
-            self.showWatting("选择照片不能超过\(self.selectPickerMaxCount!)张")
+            self.view.showWatting("选择照片不能超过\(self.selectPickerMaxCount!)张")
             UIView.animateWithDuration(1.0, animations: { () -> Void in
-                self.hideWatting()
+                self.view.hideWatting()
             })
             return false
         }
         return true
-    }
-    
-    private func showWatting(str:String){
-        if self.collectionView != nil {
-            self.collectionView!.userInteractionEnabled = false
-        }
-        if self.messageLbl != nil {
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.messageLbl.alpha = 1.0
-            })
-        }else {
-            let width:CGFloat = 180
-            let height:CGFloat = 35
-            let x:CGFloat = (self.view.frame.width - width) * 0.5
-            let y:CGFloat = (self.view.frame.height - height) * 0.5
-            let messageLbl:UILabel = UILabel(frame: CGRectMake(x,y,width,height))
-            messageLbl.layer.masksToBounds = true
-            messageLbl.layer.cornerRadius = 5.0
-            messageLbl.textAlignment = .Center
-            messageLbl.text = str
-            messageLbl.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-            messageLbl.textColor = UIColor.whiteColor()
-            self.view.addSubview(messageLbl)
-            self.messageLbl = messageLbl
-        }
-    }
-    
-    private func hideWatting(){
-        self.collectionView!.userInteractionEnabled = true
-        UIView.animateWithDuration(0.25) { () -> Void in
-            self.messageLbl.alpha = 0.0
-        }
-    }
-    
-    private func ml_imageFromBundleNamed(named:String)->UIImage{
-        let image = UIImage(named: "MLImagePickerController.bundle".stringByAppendingString("/"+(named as String)))!
-        return image
     }
     
     // MARK: GestureRecognizer

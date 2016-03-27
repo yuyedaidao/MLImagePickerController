@@ -20,6 +20,9 @@
 		482CF9B61C9959E500E7F226 /* MLImagePickerGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */; };
 		482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */; };
 		48411AB01CA67C67003B8910 /* MLImagePickerQuickView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */; };
+		48411AB71CA7A8C0003B8910 /* MLImagePickerAssetsManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48411AB61CA7A8C0003B8910 /* MLImagePickerAssetsManger.swift */; };
+		48411AB91CA7AA87003B8910 /* ML+UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48411AB81CA7AA87003B8910 /* ML+UIImageExtension.swift */; };
+		48411ABB1CA7AC0A003B8910 /* ML+UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48411ABA1CA7AC0A003B8910 /* ML+UIViewExtension.swift */; };
 		48A5267C1CA51C1E00290AB7 /* MLImageBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A5267B1CA51C1E00290AB7 /* MLImageBrowserViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +42,9 @@
 		482CF9AD1C9959E500E7F226 /* MLImagePickerGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLImagePickerGroupCell.xib; sourceTree = "<group>"; };
 		482CF9AF1C9959E500E7F226 /* MLImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerController.swift; sourceTree = "<group>"; };
 		48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerQuickView.swift; sourceTree = "<group>"; };
+		48411AB61CA7A8C0003B8910 /* MLImagePickerAssetsManger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLImagePickerAssetsManger.swift; sourceTree = "<group>"; };
+		48411AB81CA7AA87003B8910 /* ML+UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ML+UIImageExtension.swift"; sourceTree = "<group>"; };
+		48411ABA1CA7AC0A003B8910 /* ML+UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ML+UIViewExtension.swift"; sourceTree = "<group>"; };
 		48A5267B1CA51C1E00290AB7 /* MLImageBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MLImageBrowserViewController.swift; path = MLImagePickerController/MLImagePickerController/Classes/ViewController/MLImageBrowserViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -94,6 +100,7 @@
 		482CF9A41C9959E500E7F226 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				48411AB51CA7A8AC003B8910 /* Model */,
 				482CF9A51C9959E500E7F226 /* Extension */,
 				482CF9A81C9959E500E7F226 /* MLImagePickerController.bundle */,
 				482CF9A91C9959E500E7F226 /* View */,
@@ -106,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				482CF9A61C9959E500E7F226 /* MBIBDesignableExtension.swift */,
+				48411AB81CA7AA87003B8910 /* ML+UIImageExtension.swift */,
+				48411ABA1CA7AC0A003B8910 /* ML+UIViewExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -129,6 +138,14 @@
 				48411AAF1CA67C67003B8910 /* MLImagePickerQuickView.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		48411AB51CA7A8AC003B8910 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				48411AB61CA7A8C0003B8910 /* MLImagePickerAssetsManger.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +223,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48411AB91CA7AA87003B8910 /* ML+UIImageExtension.swift in Sources */,
+				48411ABB1CA7AC0A003B8910 /* ML+UIViewExtension.swift in Sources */,
 				482CF9B51C9959E500E7F226 /* MLImagePickerGroupCell.swift in Sources */,
 				48A5267C1CA51C1E00290AB7 /* MLImageBrowserViewController.swift in Sources */,
 				48411AB01CA67C67003B8910 /* MLImagePickerQuickView.swift in Sources */,
@@ -214,6 +233,7 @@
 				480C7C031C96BD970002831A /* AppDelegate.swift in Sources */,
 				482CF9B71C9959E500E7F226 /* MLImagePickerController.swift in Sources */,
 				482CF9B01C9959E500E7F226 /* MBIBDesignableExtension.swift in Sources */,
+				48411AB71CA7A8C0003B8910 /* MLImagePickerAssetsManger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

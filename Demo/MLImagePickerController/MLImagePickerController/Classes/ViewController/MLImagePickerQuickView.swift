@@ -19,7 +19,7 @@ class MLImagePickerQuickView: UIView,
 {
     
     private var fetchResult:PHFetchResult!
-    private var imageManager:PHCachingImageManager!
+    private var imageManager:MLImagePickerAssetsManger!
     private let photoIdentifiers:NSMutableArray = []
     private let selectImages:NSMutableArray = []
     private let listsImages:NSMutableArray = []
@@ -106,22 +106,18 @@ class MLImagePickerQuickView: UIView,
         albumContainerView.addSubview(collectionView)
         self.collectionView = collectionView
         
-        self.imageManager = PHCachingImageManager()
+        self.imageManager = MLImagePickerAssetsManger()
         self.imageManager.stopCachingImagesForAllAssets()
-        
-        let options:PHFetchOptions = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result:PHFetchResult = PHAsset.fetchAssetsWithOptions(options)
+        self.fetchResult = self.imageManager.result()
         
         let requestOptions = PHImageRequestOptions()
         requestOptions.deliveryMode = .HighQualityFormat
         requestOptions.networkAccessAllowed = true
-        self.fetchResult = result
         
-        let count = result.count > 50 ? 50 : result.count
+        let count = self.fetchResult.count > 50 ? 50 : self.fetchResult.count
         
         for (var i = 0; i < count; i++){
-            let asset:PHAsset = result[i] as! PHAsset
+            let asset:PHAsset = self.fetchResult[i] as! PHAsset
             self.photoIdentifiers.addObject(asset.localIdentifier)
             
             self.imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100,100), contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
@@ -226,38 +222,6 @@ class MLImagePickerQuickView: UIView,
             return false
         }
         return true
-    }
-    
-    private func showWatting(str:String){
-        if self.collectionView != nil {
-            self.collectionView!.userInteractionEnabled = false
-        }
-        if self.messageLbl != nil {
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.messageLbl.alpha = 1.0
-            })
-        }else {
-            let width:CGFloat = 180
-            let height:CGFloat = 35
-            let x:CGFloat = (self.frame.width - width) * 0.5
-            let y:CGFloat = (self.frame.height - height) * 0.5
-            let messageLbl:UILabel = UILabel(frame: CGRectMake(x,y,width,height))
-            messageLbl.layer.masksToBounds = true
-            messageLbl.layer.cornerRadius = 5.0
-            messageLbl.textAlignment = .Center
-            messageLbl.text = str
-            messageLbl.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-            messageLbl.textColor = UIColor.whiteColor()
-            self.addSubview(messageLbl)
-            self.messageLbl = messageLbl
-        }
-    }
-    
-    private func hideWatting(){
-        self.collectionView!.userInteractionEnabled = true
-        UIView.animateWithDuration(0.25) { () -> Void in
-            self.messageLbl.alpha = 0.0
-        }
     }
     
     func done(){
