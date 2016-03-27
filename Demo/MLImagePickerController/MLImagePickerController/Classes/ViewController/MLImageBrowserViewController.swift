@@ -11,7 +11,8 @@ import PhotosUI
 
 class MLImageBrowserViewController: UIViewController {
 
-    var asset:PHAsset!    
+    var asset:PHAsset!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
