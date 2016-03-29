@@ -126,10 +126,31 @@ class MLImagePickerController:  UIViewController,
     func done(){
         if self.delegate != nil{
             //获取高清原图
-        
+            if self.selectAssets.count > 0 {
+                MLHud.show()
+                var dataArray = [UIImage]()
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                    let requestOptions = PHImageRequestOptions()
+                    requestOptions.synchronous = true
+                    for item in self.selectAssets {
+                        self.imageManager.requestImageForAsset(item, targetSize: PHImageManagerMaximumSize, contentMode: .AspectFill, options: requestOptions, resultHandler: { (image, info) in
+                            dataArray.append(image!)
+                        })
+                    }
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        MLHud.hide()
+//                        self.delegate!.imagePickerDidSelectedAssets!(self.selectAssets, data: dataArray)
+//                        self.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                })
+            } else {
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
 //            self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
+        } else {
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
-        self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     private func setupCollectionView(){
