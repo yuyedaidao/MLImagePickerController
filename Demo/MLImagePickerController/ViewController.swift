@@ -8,7 +8,7 @@
 //  issue: https://github.com/MakeZL/MLImagePickerController/issues/new
 
 import UIKit
-
+import Photos
 class ViewController: UIViewController,
                       MLImagePickerControllerDelegate,
                       UITableViewDataSource,
@@ -16,8 +16,8 @@ class ViewController: UIViewController,
 {
 
     @IBOutlet weak var tableView: UITableView!
-    var assets:NSArray? = []
-    var assetIdentifiers:NSArray? = []
+    var dataArray: [AnyObject] = []
+    var selectedAsset = [PHAsset]()
     var quickView:MLImagePickerQuickView?
     
     override func viewDidLoad() {
@@ -31,8 +31,7 @@ class ViewController: UIViewController,
         pickerVc.delegate = self
         // 最大图片个数
         pickerVc.selectPickerMaxCount = 20
-        // 默认记录选择的图片
-        pickerVc.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
+        pickerVc.selectAssets = self.selectedAsset
         pickerVc.show(self)
     }
     
@@ -44,7 +43,7 @@ class ViewController: UIViewController,
         // 最大图片个数
         quickView.selectPickerMaxCount = 20
         // 默认记录选择的图片
-        quickView.selectIndentifiers = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
+//        quickView. = self.assetIdentifiers?.mutableCopy() as! NSMutableArray
         // 如果不传的话，预览不能打开相册
         quickView.viewControllerReponse = self
         // 准备工作
@@ -54,18 +53,18 @@ class ViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.assets != nil ? self.assets!.count : 0
+        return self.dataArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")
-        cell?.imageView!.image = self.assets![indexPath.item] as? UIImage
+        cell?.imageView!.image = self.dataArray[indexPath.item] as? UIImage
         return cell!
     }
     
-    func imagePickerDidSelectedAssets(assets: NSArray, assetIdentifiers: NSArray) {
-        self.assets = assets
-        self.assetIdentifiers = assetIdentifiers
+    func imagePickerDidSelectedAssets(assets: [PHAsset], dataArray: [AnyObject]) {
+        self.selectedAsset = assets
+        self.dataArray = dataArray
         self.tableView.reloadData()
     }
 

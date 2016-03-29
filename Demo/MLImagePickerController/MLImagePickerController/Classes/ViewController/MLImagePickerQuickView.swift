@@ -66,7 +66,7 @@ class MLImagePickerQuickView: UIView,
             openAlbumBtn.setTitleColor(UIColor(red: 49/256.0, green: 105/256.0, blue: 245/256.0, alpha: 1.0), forState: .Normal)
             openAlbumBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
             openAlbumBtn.setTitle("打开相册", forState: .Normal)
-            openAlbumBtn.addTarget(self, action: "openAlbum", forControlEvents: .TouchUpInside)
+            openAlbumBtn.addTarget(self, action: #selector(MLImagePickerQuickView.openAlbum), forControlEvents: .TouchUpInside)
             menuView.addSubview(openAlbumBtn)
         }
         
@@ -74,7 +74,7 @@ class MLImagePickerQuickView: UIView,
         doneBtn.setTitleColor(UIColor(red: 49/256.0, green: 105/256.0, blue: 245/256.0, alpha: 1.0), forState: .Normal)
         doneBtn.titleLabel?.font = UIFont.systemFontOfSize(14)
         doneBtn.setTitle("完成", forState: .Normal)
-        doneBtn.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
+        doneBtn.addTarget(self, action: #selector(MLImagePickerQuickView.done), forControlEvents: .TouchUpInside)
         menuView.addSubview(doneBtn)
         
         let redTagLbl = UILabel()
@@ -115,11 +115,9 @@ class MLImagePickerQuickView: UIView,
         requestOptions.networkAccessAllowed = true
         
         let count = self.fetchResult.count > 50 ? 50 : self.fetchResult.count
-        
-        for (var i = 0; i < count; i++){
+        for i in 0 ..< count {
             let asset:PHAsset = self.fetchResult[i] as! PHAsset
             self.photoIdentifiers.addObject(asset.localIdentifier)
-            
             self.imageManager.requestImageForAsset(asset, targetSize: CGSizeMake(100,100), contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
                 self.listsImages.addObject(image!)
                 
@@ -226,7 +224,7 @@ class MLImagePickerQuickView: UIView,
     
     func done(){
         if self.delegate != nil{
-            self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
+            self.delegate?.imagePickerDidSelectedAssets!(self.selectImages, assetIdentifiers: self.selectIndentifiers)
         }
         
         UIView.animateWithDuration(0.25, animations: { () -> Void in
@@ -250,7 +248,7 @@ class MLImagePickerQuickView: UIView,
         // 最大图片个数
         pickerVc.selectPickerMaxCount = 20
         // 默认记录选择的图片
-        pickerVc.selectIndentifiers = self.selectIndentifiers.mutableCopy() as! NSMutableArray
+//        pickerVc.selectIndentifiers = self.selectIndentifiers.mutableCopy() as! NSMutableArray
         pickerVc.show(self.viewControllerReponse!)
     }
 

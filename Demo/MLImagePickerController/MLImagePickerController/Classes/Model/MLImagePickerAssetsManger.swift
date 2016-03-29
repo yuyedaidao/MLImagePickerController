@@ -11,13 +11,14 @@ import PhotosUI
 
 class MLImagePickerAssetsManger: PHCachingImageManager {
     
-    private var fetchResult:PHFetchResult!
+    private var fetchResult:PHFetchResult! 
     
     func result()->PHFetchResult{
+
         if self.fetchResult != nil {
             return self.fetchResult
         }
-        self.stopCachingImagesForAllAssets()
+//        self.stopCachingImagesForAllAssets()
         
         let options:PHFetchOptions = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]

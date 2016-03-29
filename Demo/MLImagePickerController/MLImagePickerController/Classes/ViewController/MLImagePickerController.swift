@@ -9,12 +9,13 @@
 import UIKit
 import Photos
 
-protocol MLImagePickerControllerDelegate {
-    func imagePickerDidSelectedAssets(assets:NSArray, assetIdentifiers:NSArray)
+@objc protocol MLImagePickerControllerDelegate {
+    optional func imagePickerDidSelectedAssets(assets: [PHAsset], data: [AnyObject])
+    optional func imagePickerDidSelectedAssets(assets: NSArray, assetIdentifiers:NSArray)
 }
 
 private let MLImagePickerCellMargin:CGFloat = 2
-private let MLImagePickerCellRowCount:CGFloat = 3
+private let MLImagePickerCellRowCount:CGFloat = 4
 private let MLImagePickerMaxCount:Int = 9
 private let MLImagePickerUIScreenScale = UIScreen.mainScreen().scale
 private let MLImagePickerCellWidth = (UIScreen.mainScreen().bounds.size.width - MLImagePickerCellMargin * MLImagePickerCellRowCount + 1) / MLImagePickerCellRowCount
@@ -27,8 +28,9 @@ class MLImagePickerController:  UIViewController,
                                 UITableViewDelegate
 {
     private var fetchResult:PHFetchResult!
-    private let selectImages:NSMutableArray = []
-    private let photoIdentifiers:NSMutableArray = []
+//    private let selectImages:NSMutableArray = []
+    var selectAssets = [PHAsset]()
+//    private let photoIdentifiers:NSMutableArray = []
     private var groupSectionFetchResults:NSMutableArray = []
     private var AssetGridThumbnailSize:CGSize!
     private var imageManager:MLImagePickerAssetsManger!
@@ -44,17 +46,14 @@ class MLImagePickerController:  UIViewController,
     
     // <MLImagePickerControllerDelegate>, SelectAssets CallBack
     var delegate:MLImagePickerControllerDelegate?
-    // Selected Indentifiers Assets
-    var selectIndentifiers:NSMutableArray = []
     // Setting Max Multiselect Count
-    var selectPickerMaxCount:Int! = 9
+    var selectPickerMaxCount:Int! = Int.max
     // Scroll Selecte Pickers, Default is YES
     var cancleLongGestureScrollSelectedPicker:Bool! = false
     
     func show(vc:UIViewController!){
         let imagePickerVc = MLImagePickerController()
         imagePickerVc.delegate = self.delegate
-        imagePickerVc.selectIndentifiers = selectIndentifiers
         imagePickerVc.selectPickerMaxCount = self.selectPickerMaxCount == nil ? MLImagePickerMaxCount : self.selectPickerMaxCount
         
         let navigationVc = UINavigationController(rootViewController: imagePickerVc)
@@ -77,26 +76,11 @@ class MLImagePickerController:  UIViewController,
         self.fetchResult = self.imageManager.result()
         AssetGridThumbnailSize = CGSizeMake(MLImagePickerCellWidth * MLImagePickerUIScreenScale, MLImagePickerCellWidth * MLImagePickerUIScreenScale);
         
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.deliveryMode = .FastFormat
-        requestOptions.networkAccessAllowed = true
-        
-        for (var i = 0; i < self.fetchResult.count; i++){
-            let asset:PHAsset = self.fetchResult[i] as! PHAsset
-            self.photoIdentifiers.addObject(asset.localIdentifier)
-            
-            if self.selectIndentifiers.containsObject(asset.localIdentifier) == true {
-                self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-                    self.selectImages.addObject(image!)
-                }
-            }
-        }
         self.collectionView?.reloadData()
         self.collectionView?.layoutIfNeeded()
-        self.scrollViewDidEndDecelerating(self.collectionView!)
         
         if self.cancleLongGestureScrollSelectedPicker == false {
-            self.collectionView?.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressGestureScrollPhoto:"))
+            self.collectionView?.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(MLImagePickerController.longPressGestureScrollPhoto(_:))))
         }
     }
     
@@ -107,7 +91,7 @@ class MLImagePickerController:  UIViewController,
         titleBtn.titleLabel?.font = UIFont.systemFontOfSize(16)
         titleBtn.setTitleColor(UIColor.grayColor(), forState: .Normal)
         titleBtn.setTitle("所有图片", forState: .Normal)
-        titleBtn.addTarget(self, action: "tappenTitleView", forControlEvents: .TouchUpInside)
+        titleBtn.addTarget(self, action: #selector(MLImagePickerController.tappenTitleView), forControlEvents: .TouchUpInside)
 
         titleBtn.setImage(UIImage.ml_imageFromBundleNamed("zl_xialajiantou"), forState: .Normal)
         self.navigationItem.titleView = titleBtn
@@ -120,13 +104,13 @@ class MLImagePickerController:  UIViewController,
         
         navigationItemRightBtn.setTitleColor(UIColor(red: 49/256.0, green: 105/256.0, blue: 245/256.0, alpha: 1.0), forState: .Normal)
         
-        navigationItemRightBtn.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
+        navigationItemRightBtn.addTarget(self, action: #selector(MLImagePickerController.done), forControlEvents: .TouchUpInside)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: navigationItemRightBtn)
         self.navigationItemRightBtn = navigationItemRightBtn
         
         let redTagLbl = UILabel()
-        redTagLbl.hidden = (self.selectIndentifiers.count == 0)
-        redTagLbl.text = "\(self.selectIndentifiers.count)"
+        redTagLbl.hidden = (self.selectAssets.count == 0)
+        redTagLbl.text = "\(self.selectAssets.count)"
         redTagLbl.layer.cornerRadius = 8.0
         redTagLbl.layer.masksToBounds = true
         redTagLbl.backgroundColor = UIColor.redColor()
@@ -136,11 +120,14 @@ class MLImagePickerController:  UIViewController,
         redTagLbl.frame = CGRectMake(navigationItemRightBtn.frame.width-8,0, 16, 16)
         navigationItemRightBtn.addSubview(redTagLbl)
         self.redTagLbl = redTagLbl
+    
     }
     
     func done(){
         if self.delegate != nil{
-            self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
+            //获取高清原图
+        
+//            self.delegate?.imagePickerDidSelectedAssets(self.selectImages, assetIdentifiers: self.selectIndentifiers)
         }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -186,7 +173,7 @@ class MLImagePickerController:  UIViewController,
             
             let groupBackgroundView = UIView(frame: CGRectMake(0, CGRectGetMaxY(groupTableView.frame), groupTableContainerView.frame.width, groupTableContainerView.frame.height - CGRectGetMaxY(groupTableView.frame)))
             groupBackgroundView.backgroundColor = UIColor.clearColor()
-            groupBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "setupGroupTableView"))
+            groupBackgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MLImagePickerController.setupGroupTableView)))
             self.groupTableContainerView!.addSubview(groupBackgroundView)
             
             let options:PHFetchOptions = PHFetchOptions()
@@ -218,21 +205,15 @@ class MLImagePickerController:  UIViewController,
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell:MLImagePickerAssetsCell = collectionView.dequeueReusableCellWithReuseIdentifier("MLImagePickerAssetsCell", forIndexPath: indexPath) as! MLImagePickerAssetsCell
-        
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
-        
         cell.delegate = self
         cell.asset = asset
         cell.indexPath = indexPath
-        cell.localIdentifier = self.photoIdentifiers[indexPath.item] as! String
-        cell.selectButtonSelected = self.selectIndentifiers.containsObject(cell.localIdentifier)
+        cell.localIdentifier = asset.localIdentifier
+        cell.selectButtonSelected = self.selectAssets.contains(asset)
         cell.isShowVideo = (asset.mediaType == .Video)
-        
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.deliveryMode = .FastFormat
-        requestOptions.networkAccessAllowed = true
-        
-        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
+
+        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
             
             // Set the cell's thumbnail image if it's still showing the same asset.
             if (cell.localIdentifier == asset.localIdentifier) {
@@ -282,7 +263,6 @@ class MLImagePickerController:  UIViewController,
         self.tableViewSelectedIndexPath = indexPath
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.setupGroupTableView()
-        self.photoIdentifiers.removeAllObjects()
         
         let cell:MLImagePickerGroupCell = tableView.cellForRowAtIndexPath(indexPath) as! MLImagePickerGroupCell
         self.titleBtn.setTitle(cell.titleLbl.text, forState: .Normal)
@@ -294,19 +274,9 @@ class MLImagePickerController:  UIViewController,
             fetchResult = PHAsset.fetchAssetsInAssetCollection(collection, options: nil)
         }
         self.fetchResult = fetchResult
-        
-        for (var i = 0; i < fetchResult.count; i++){
-            let asset:PHAsset = fetchResult[i] as! PHAsset
-            self.photoIdentifiers.addObject(asset.localIdentifier)
-        }
-        for (var i = 0; i < fetchResult.count; i++){
-            let asset:PHAsset = fetchResult[i] as! PHAsset
-            self.photoIdentifiers.addObject(asset.localIdentifier)
-        }
         self.groupTableView?.reloadData()
         self.collectionView?.reloadData()
         self.collectionView?.layoutIfNeeded()
-        self.scrollViewDidEndDecelerating(self.collectionView!)
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -315,51 +285,29 @@ class MLImagePickerController:  UIViewController,
     
     // MARK: MLImagePickerAssetsCellDelegate
     func imagePickerSelectAssetsCellWithSelected(indexPath: NSIndexPath, selected: Bool) -> Bool {
-        let identifier = self.photoIdentifiers[indexPath.item]
         let asset:PHAsset = self.fetchResult[indexPath.item] as! PHAsset
-        
         if selected == true {
-            if (self.checkBeyondMaxSelectPickerCount() == false){
+            if !self.checkBeyondMaxSelectPickerCount() {
                 return false
             }
-            if self.selectIndentifiers.containsObject(identifier) == false {
-                // Insert
-                self.selectIndentifiers.addObject(identifier)
-            }else{
-                return false;
+            if !self.selectAssets.contains(asset) {
+                self.selectAssets.append(asset)
+            } else {
+                return false
             }
         }else{
             // Delete
-            if selectIndentifiers.containsObject(identifier) {
-                let index = self.selectIndentifiers.indexOfObject(identifier)
-                self.selectImages.removeObjectAtIndex(index)
-            }
-            self.selectIndentifiers.removeObject(identifier)
-            
-            self.redTagLbl.hidden = (self.selectIndentifiers.count == 0)
-            self.redTagLbl.text = "\(self.selectIndentifiers.count)"
-            
-            return true
-        }
-    
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.deliveryMode = .HighQualityFormat
-        requestOptions.networkAccessAllowed = true
-        
-        self.imageManager.requestImageForAsset(asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: requestOptions) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-            if image != nil {
-                self.selectImages.addObject(image!)
-                
-                self.redTagLbl.hidden = (self.selectIndentifiers.count == 0)
-                self.redTagLbl.text = "\(self.selectIndentifiers.count)"
+            if self.selectAssets.contains(asset) {
+                self.selectAssets.removeAtIndex(self.selectAssets.indexOf(asset)!)
             }
         }
-        
+        self.redTagLbl.hidden = (self.selectAssets.count == 0)
+        self.redTagLbl.text = "\(self.selectAssets.count)"
         return true
     }
     
     private func checkBeyondMaxSelectPickerCount()->Bool{
-        if (self.selectIndentifiers.count >= self.selectPickerMaxCount) {
+        if (self.selectAssets.count >= self.selectPickerMaxCount) {
             self.view.showWatting("选择照片不能超过\(self.selectPickerMaxCount!)张")
             UIView.animateWithDuration(1.0, animations: { () -> Void in
                 self.view.hideWatting()
@@ -372,34 +320,18 @@ class MLImagePickerController:  UIViewController,
     // MARK: GestureRecognizer
     func longPressGestureScrollPhoto(gesture:UILongPressGestureRecognizer){
         let point = gesture.locationInView(self.collectionView)
-        
-        for var cell:MLImagePickerAssetsCell in self.collectionView!.visibleCells() as! Array<MLImagePickerAssetsCell>{
+        for cell in self.collectionView!.visibleCells() as! [MLImagePickerAssetsCell]  {
             if ((CGRectGetMaxY(cell.frame) > point.y && CGRectGetMaxY(cell.frame) - point.y <= cell.frame.height) == true &&
                 (CGRectGetMaxX(cell.frame) > point.x && CGRectGetMaxX(cell.frame) - point.x <= cell.frame.width)
                 ) == true {
                     let indexPath = self.collectionView?.indexPathForCell(cell)
-                    
                     if (self.checkBeyondMaxSelectPickerCount() == false){
                         return
                     }
                     cell.selectButtonSelected = true
                     self.imagePickerSelectAssetsCellWithSelected(indexPath!, selected: true)
-            }else{
-                
             }
         }
     }
     
-    // MARK: UIScrollViewDelegate
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if scrollView.isKindOfClass(UICollectionView) == true {
-            for var cell:MLImagePickerAssetsCell in self.collectionView?.visibleCells() as! [MLImagePickerAssetsCell]  {
-                self.imageManager.requestImageForAsset(cell.asset, targetSize: AssetGridThumbnailSize, contentMode: .AspectFill, options: nil) { (let image, let info:[NSObject : AnyObject]?) -> Void in
-                    if (cell.localIdentifier == cell.asset.localIdentifier) {
-                        cell.imageV.image = image;
-                    }
-                }
-            }
-        }
-    }
 }
